@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת ניהול מלאי ביתי</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <!-- QuaggaJS for barcode scanning -->
+    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+</head>
+<body>
+    <!-- Authentication Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <h2>התחברות</h2>
+            <form id="auth-form">
+                <div class="form-group">
+                    <label for="email">אימייל:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">סיסמה:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" id="login-btn">התחבר</button>
+                <button type="button" id="register-btn">הרשמה</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container hidden" id="main-container">
+        <header>
+            <h1>מערכת ניהול מלאי ביתי</h1>
+            <button id="logout-btn" class="logout-btn">התנתק</button>
+        </header>
+
+        <div class="main-content">
+            <!-- Category Selection -->
+            <div class="category-selection">
+                <h2>בחר קטגוריה</h2>
+                <div class="category-buttons">
+                    <button id="books-btn" class="category-btn">ספרים</button>
+                    <button id="food-btn" class="category-btn">מזון</button>
+                    <button id="items-btn" class="category-btn">פריטים</button>
+                </div>
+            </div>
+
+            <!-- Search and Add Section -->
+            <div class="search-add-section">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="חיפוש פריטים...">
+                    <button id="search-btn">חיפוש</button>
+                </div>
+                <button id="add-item-btn" class="action-btn">הוסף פריט חדש</button>
+                <button id="scan-barcode-btn" class="action-btn">סרוק ברקוד</button>
+            </div>
+
+            <!-- Items List -->
+            <div class="items-list">
+                <h2>רשימת פריטים</h2>
+                <div id="items-container"></div>
+            </div>
+
+            <!-- Barcode Scanner -->
+            <div id="scanner-container" class="hidden">
+                <div id="interactive" class="viewport"></div>
+                <button id="stop-scan-btn">הפסק סריקה</button>
+            </div>
+        </div>
+
+        <!-- Add/Edit Item Modal -->
+        <div id="item-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2 id="modal-title">הוסף פריט חדש</h2>
+                <form id="item-form">
+                    <div class="form-group">
+                        <label for="item-name">שם הפריט:</label>
+                        <input type="text" id="item-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-description">תיאור:</label>
+                        <textarea id="item-description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-location">מיקום:</label>
+                        <input type="text" id="item-location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-notes">הערות:</label>
+                        <textarea id="item-notes"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-barcode">ברקוד:</label>
+                        <input type="text" id="item-barcode">
+                    </div>
+                    <div class="form-group" id="author-group">
+                        <label for="item-author">מחבר:</label>
+                        <input type="text" id="item-author">
+                    </div>
+                    <button type="submit" id="save-item-btn">שמור</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
