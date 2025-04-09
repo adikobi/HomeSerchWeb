@@ -150,8 +150,7 @@ function createItemCard(item) {
     const card = document.createElement('div');
     card.className = 'item-card';
     card.innerHTML = `
-        <h3>${item.name || 'ללא שם'}</h3>
-        <p><strong>תיאור:</strong> ${item.description || 'ללא תיאור'}</p>
+        <h3>${item.description || 'ללא שם'}</h3>
         <p><strong>מיקום:</strong> ${item.location || 'ללא מיקום'}</p>
         <p><strong>הערות:</strong> ${item.notes || 'ללא הערות'}</p>
         ${item.barcode ? `<p><strong>ברקוד:</strong> ${item.barcode}</p>` : ''}
@@ -181,15 +180,17 @@ function searchItems() {
 
 // Show Add Item Modal
 function showAddItemModal() {
+    console.log("showAddItemModal");
     editingItemId = null;
     document.getElementById('modal-title').textContent = 'הוסף פריט חדש';
-    document.getElementById('item-name').value = '';
     document.getElementById('item-description').value = '';
     document.getElementById('item-location').value = '';
     document.getElementById('item-notes').value = '';
     document.getElementById('item-barcode').value = '';
     document.getElementById('item-author').value = '';
     itemModal.classList.remove('hidden');
+    itemModal.style.display = "block";
+    console.log("doneshowAddItemModal");
 }
 
 // Hide Modal
@@ -202,7 +203,6 @@ function saveItem(e) {
     e.preventDefault();
     
     const itemData = {
-        name: document.getElementById('item-name').value,
         description: document.getElementById('item-description').value,
         location: document.getElementById('item-location').value,
         notes: document.getElementById('item-notes').value,
@@ -242,9 +242,8 @@ function saveItem(e) {
 function editItem(itemId) {
     editingItemId = itemId;
     const item = currentItems.find(i => i.id === itemId);
-    
+    console.log(item);
     document.getElementById('modal-title').textContent = 'ערוך פריט';
-    document.getElementById('item-name').value = item.name || '';
     document.getElementById('item-description').value = item.description || '';
     document.getElementById('item-location').value = item.location || '';
     document.getElementById('item-notes').value = item.notes || '';
