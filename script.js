@@ -180,7 +180,6 @@ function searchItems() {
 
 // Show Add Item Modal
 function showAddItemModal() {
-    console.log("showAddItemModal");
     editingItemId = null;
     document.getElementById('modal-title').textContent = 'הוסף פריט חדש';
     document.getElementById('item-description').value = '';
@@ -188,6 +187,7 @@ function showAddItemModal() {
     document.getElementById('item-notes').value = '';
     document.getElementById('item-barcode').value = '';
     document.getElementById('item-author').value = '';
+    document.getElementById('item-category').value = currentCategory || 'items';
     itemModal.classList.remove('hidden');
     itemModal.style.display = "block";
 }
@@ -199,12 +199,8 @@ function hideModal() {
 
 // Edit Item
 function editItem(itemId) {
-    console.log("editItem");
-
     editingItemId = itemId;
-    console.log("editingItemId", editingItemId);
     const item = currentItems.find(i => i.id === itemId);
-    console.log("item", item);
     if (!item) {
         console.error('Item not found');
         return;
@@ -216,8 +212,8 @@ function editItem(itemId) {
     document.getElementById('item-notes').value = item.notes || '';
     document.getElementById('item-barcode').value = item.barcode || '';
     document.getElementById('item-author').value = item.author || '';
-    console.log("item-author", document.getElementById('item-author').value);
-
+    document.getElementById('item-category').value = currentCategory;
+    
     // Add scan button next to barcode input
     const barcodeGroup = document.querySelector('label[for="item-barcode"]').parentElement;
     if (!barcodeGroup.querySelector('.scan-barcode-btn')) {
@@ -226,25 +222,24 @@ function editItem(itemId) {
         scanBtn.className = 'scan-barcode-btn';
         scanBtn.textContent = 'סרוק ברקוד';
         scanBtn.onclick = function() {
-            startBarcodeScanner();
-            // Update barcode field when scan is complete
-            Quagga.onDetected(function(result) {
-                const code = result.codeResult.code;
-                document.getElementById('item-barcode').value = code;
-                stopBarcodeScanner();
-            });
+            //itemModal.classList.add('hidden');
+            startBarcodeScanner(false);
+            
+
         };
         barcodeGroup.appendChild(scanBtn);
     }
-    console.log("itemModal", itemModal);
+    
     itemModal.classList.remove('hidden');
     itemModal.style.display = "block";
+
 }
 
 // Save Item
 function saveItem(e) {
     e.preventDefault();
     
+    const selectedCategory = document.getElementById('item-category').value;
     const itemData = {
         description: document.getElementById('item-description').value,
         location: document.getElementById('item-location').value,
@@ -252,7 +247,7 @@ function saveItem(e) {
         barcode: document.getElementById('item-barcode').value
     };
 
-    if (currentCategory === 'books') {
+    if (selectedCategory === 'books') {
         itemData.author = document.getElementById('item-author').value;
     }
 
@@ -277,10 +272,12 @@ function saveItem(e) {
         });
     } else {
         // Add new item
-        database.ref(currentCategory).push(itemData)
+        database.ref(selectedCategory).push(itemData)
             .then(() => {
                 console.log('Item added successfully');
                 hideModal();
+                // Switch to the selected category
+                selectCategory(selectedCategory);
             })
             .catch(error => {
                 console.error('Error adding item:', error);
@@ -297,7 +294,7 @@ function deleteItem(itemId) {
 }
 
 // Barcode Scanner
-function startBarcodeScanner() {
+function startBarcodeScanner(search=true) {
     scannerContainer.classList.remove('hidden');
     
     Quagga.init({
@@ -314,14 +311,29 @@ function startBarcodeScanner() {
         },
         locator: {
             patchSize: "medium",
-            halfSample: true
+            halfSample: true,
+            debug: {
+                showCanvas: true,
+                showPatches: true,
+                showFoundPatches: true,
+                showSkeleton: true,
+                showLabels: true,
+                showPatchLabels: true,
+                showRemainingPatchLabels: true,
+                boxFromPatches: {
+                    showTransformed: true,
+                    showTransformedBox: true,
+                    showBB: true
+                }
+            }
         },
         numOfWorkers: 4,
         decoder: {
-            readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader"],
-            debug: {
+            readers: ["ean_reader", "ean_8_reader", "upc_reader", "upc_e_reader"],
+            debug: {    
                 drawBoundingBox: true,
-                drawPattern: true
+                drawPattern: true,
+                showPattern: true
             }
         },
         locate: true
@@ -335,24 +347,78 @@ function startBarcodeScanner() {
         Quagga.start();
         scannerIsLive = true;
     });
-
-    let lastResult = null;
-    let lastResultTime = 0;
-
+ 
+    let lastDetectedCode = null;
+    let consecutiveCount = 0;
+    const requiredMatches = 5;
+    const resultCooldown = 2000;
+    let lastAcceptedTime = 0;
+    let codeHistory = [];
+    const codeHistorySize = 3;
+    
     Quagga.onDetected(function(result) {
-        const code = result.codeResult.code;
-        const currentTime = Date.now();
-        
-        // Prevent duplicate scans within 1 second
-        if (lastResult === code && (currentTime - lastResultTime) < 1000) {
+        const codeResult = result.codeResult;
+        const now = Date.now();
+    
+        if (!codeResult || !codeResult.code) {
+            console.log("⛔️ No valid code detected.");
             return;
         }
+    
+        const code = codeResult.code;
         
-        lastResult = code;
-        lastResultTime = currentTime;
-        
-        stopBarcodeScanner();
-        searchByBarcode(code);
+        // בדיקת תקינות הברקוד
+        if (!isValidBarcode(code)) {
+            console.log(`❌ Invalid barcode format: ${code}`);
+            return;
+        }
+    
+        console.log(`📦 Detected barcode: ${code}`);
+    
+        // הוספת הקוד להיסטוריה
+        codeHistory.push(code);
+        if (codeHistory.length > codeHistorySize) {
+            codeHistory.shift();
+        }
+    
+        // בדיקה אם כל הקודים בהיסטוריה זהים
+        const allSame = codeHistory.every(c => c === code);
+    
+        if (code === lastDetectedCode) {
+            consecutiveCount++;
+        } else {
+            console.log(`🔁 New code detected. Resetting count. Previous: ${lastDetectedCode}, Current: ${code}`);
+            lastDetectedCode = code;
+            consecutiveCount = 1;
+            codeHistory = [code];
+        }
+    
+        console.log(`🔍 Count for ${code}: ${consecutiveCount}/${requiredMatches} (History: ${codeHistory.join(', ')})`);
+    
+        if (consecutiveCount >= requiredMatches && allSame) {
+            if (now - lastAcceptedTime < resultCooldown) {
+                console.log(`⏱ Barcode ${code} accepted recently. Ignoring.`);
+                return;
+            }
+    
+            console.log(`✅ Barcode accepted: ${code}`);
+            lastAcceptedTime = now;
+    
+            // איפוס הכל לאחר קבלת ברקוד
+            lastDetectedCode = null;
+            consecutiveCount = 0;
+            codeHistory = [];
+    
+            stopBarcodeScanner();
+    
+            if (search) {
+                console.log("🔍 Performing search for barcode...");
+                searchByBarcode(code);
+            } else {
+                console.log("📝 Setting barcode in input field.");
+                document.getElementById('item-barcode').value = code;
+            }
+        }
     });
 }
 
@@ -370,9 +436,61 @@ function stopBarcodeScanner() {
 function searchByBarcode(barcode) {
     const item = currentItems.find(item => item.barcode === barcode);
     if (item) {
-        searchInput.value = barcode;
+        //searchInput.value = barcode;
         displayItems([item]);
     } else {
-        alert(barcode);
+        // Open add item modal with the scanned barcode
+        editingItemId = null;
+        document.getElementById('modal-title').textContent = 'הוסף פריט חדש';
+        document.getElementById('item-description').value = '';
+        document.getElementById('item-location').value = '';
+        document.getElementById('item-notes').value = '';
+        document.getElementById('item-barcode').value = barcode;
+        document.getElementById('item-author').value = '';
+        itemModal.classList.remove('hidden');
     }
-} 
+}
+
+// פונקציה לבדיקת תקינות הברקוד
+function isValidBarcode(code) {
+    // בדיקת אורך מינימלי
+    if (code.length < 8) {
+        return false;
+    }
+    
+    // בדיקת תווים חוקיים
+    if (!/^\d+$/.test(code)) {
+        return false;
+    }
+    
+    // בדיקת ספרת ביקורת ל-EAN-13
+    if (code.length === 13) {
+        const checkDigit = parseInt(code[12]);
+        const sum = code.substring(0, 12).split('').reduce((acc, digit, index) => {
+            const num = parseInt(digit);
+            return acc + (index % 2 === 0 ? num : num * 3);
+        }, 0);
+        const calculatedCheckDigit = (10 - (sum % 10)) % 10;
+        return checkDigit === calculatedCheckDigit;
+    }
+    
+    // בדיקת ספרת ביקורת ל-UPC-A
+    if (code.length === 12) {
+        const checkDigit = parseInt(code[11]);
+        const sum = code.substring(0, 11).split('').reduce((acc, digit, index) => {
+            const num = parseInt(digit);
+            return acc + (index % 2 === 0 ? num * 3 : num);
+        }, 0);
+        const calculatedCheckDigit = (10 - (sum % 10)) % 10;
+        return checkDigit === calculatedCheckDigit;
+    }
+    
+    return true;
+}
+
+// Add event listener for category change
+document.getElementById('item-category').addEventListener('change', function() {
+    const selectedCategory = this.value;
+    const authorGroup = document.getElementById('author-group');
+    authorGroup.style.display = selectedCategory === 'books' ? 'block' : 'none';
+}); 

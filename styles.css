@@ -6,7 +6,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+    background: linear-gradient(135deg, #E1EEBC 0%, #90C67C 100%);
     min-height: 100vh;
     padding: 20px;
 }
@@ -15,8 +15,8 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     background-color: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
     padding: 30px;
 }
 
@@ -27,14 +27,14 @@ header {
 }
 
 h1 {
-    color: #2c3e50;
+    color: #328E6E;
     font-size: 2.5rem;
     margin-bottom: 10px;
     font-weight: 700;
 }
 
 h2 {
-    color: #34495e;
+    color: #67AE6E;
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -56,16 +56,16 @@ h2 {
     font-size: 1.1rem;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
 }
 
 .category-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(50, 142, 110, 0.3);
 }
 
 /* Search and Add Section */
@@ -86,33 +86,33 @@ h2 {
 #search-input {
     flex: 1;
     padding: 12px 20px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid #90C67C;
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
 
 #search-input:focus {
-    border-color: #3498db;
+    border-color: #328E6E;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
 }
 
 .action-btn {
     padding: 12px 25px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    background: linear-gradient(135deg, #67AE6E 0%, #90C67C 100%);
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
 }
 
 .action-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(50, 142, 110, 0.3);
 }
 
 /* Items List */
@@ -130,25 +130,25 @@ h2 {
     background-color: white;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.1);
     transition: all 0.3s ease;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #E1EEBC;
 }
 
 .item-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
 }
 
 .item-card h3 {
-    color: #2c3e50;
+    color: #900C3F;
     margin-bottom: 15px;
     font-size: 1.2rem;
     font-weight: 600;
 }
 
 .item-card p {
-    color: #7f8c8d;
+    color: #581845;
     margin-bottom: 8px;
     line-height: 1.5;
 }
@@ -169,7 +169,7 @@ h2 {
 }
 
 .edit-btn {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
     color: white;
 }
 
@@ -180,7 +180,7 @@ h2 {
 
 .edit-btn:hover, .delete-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
 }
 
 /* Modal */
@@ -203,7 +203,7 @@ h2 {
     border-radius: 16px;
     max-width: 500px;
     position: relative;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
 }
 
 .close-btn {
@@ -212,12 +212,12 @@ h2 {
     left: 15px;
     font-size: 24px;
     cursor: pointer;
-    color: #7f8c8d;
+    color: #67AE6E;
     transition: color 0.3s ease;
 }
 
 .close-btn:hover {
-    color: #2c3e50;
+    color: #328E6E;
 }
 
 .form-group {
@@ -227,7 +227,7 @@ h2 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #2c3e50;
+    color: #328E6E;
     font-weight: 500;
 }
 
@@ -235,7 +235,7 @@ h2 {
 .form-group textarea {
     width: 100%;
     padding: 12px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid #90C67C;
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -243,9 +243,9 @@ h2 {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: #3498db;
+    border-color: #328E6E;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
 }
 
 .form-group textarea {
@@ -256,7 +256,7 @@ h2 {
 #save-item-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    background: linear-gradient(135deg, #67AE6E 0%, #90C67C 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -269,7 +269,7 @@ h2 {
 
 #save-item-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(50, 142, 110, 0.2);
 }
 
 /* Barcode Scanner */
@@ -280,7 +280,7 @@ h2 {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
+    z-index: 2000;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -311,14 +311,14 @@ h2 {
 
 #stop-scan-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
 }
 
 /* Scan Barcode Button in Form */
 .scan-barcode-btn {
     margin-top: 8px;
     padding: 8px 16px;
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -329,7 +329,103 @@ h2 {
 
 .scan-barcode-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+}
+
+/* Authentication Modal */
+#auth-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+#auth-modal .modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+#auth-modal .form-group {
+    margin-bottom: 1rem;
+}
+
+#auth-modal label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #328E6E;
+    font-weight: 500;
+}
+
+#auth-modal input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #90C67C;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+#auth-modal input:focus {
+    border-color: #328E6E;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+}
+
+#auth-modal button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #67AE6E 0%, #90C67C 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#auth-modal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+}
+
+#auth-modal #register-btn {
+    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
+}
+
+/* Logout Button */
+.logout-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+}
+
+/* Hidden Class */
+.hidden {
+    display: none !important;
 }
 
 /* Responsive Design */
@@ -350,89 +446,4 @@ h2 {
         margin: 20px;
         width: auto;
     }
-}
-
-/* Authentication Modal */
-#auth-modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-#auth-modal .modal-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-}
-
-#auth-modal .form-group {
-    margin-bottom: 1rem;
-}
-
-#auth-modal label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-#auth-modal input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-#auth-modal button {
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 1rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#auth-modal button:hover {
-    background-color: #45a049;
-}
-
-#auth-modal #register-btn {
-    background-color: #2196F3;
-}
-
-#auth-modal #register-btn:hover {
-    background-color: #0b7dda;
-}
-
-/* Logout Button */
-.logout-btn {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.logout-btn:hover {
-    background-color: #da190b;
-}
-
-/* Hidden Class */
-.hidden {
-    display: none !important;
 } 
