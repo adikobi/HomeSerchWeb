@@ -190,12 +190,55 @@ function showAddItemModal() {
     document.getElementById('item-author').value = '';
     itemModal.classList.remove('hidden');
     itemModal.style.display = "block";
-    console.log("doneshowAddItemModal");
 }
 
 // Hide Modal
 function hideModal() {
     itemModal.classList.add('hidden');
+}
+
+// Edit Item
+function editItem(itemId) {
+    console.log("editItem");
+
+    editingItemId = itemId;
+    console.log("editingItemId", editingItemId);
+    const item = currentItems.find(i => i.id === itemId);
+    console.log("item", item);
+    if (!item) {
+        console.error('Item not found');
+        return;
+    }
+    
+    document.getElementById('modal-title').textContent = 'ערוך פריט';
+    document.getElementById('item-description').value = item.description || '';
+    document.getElementById('item-location').value = item.location || '';
+    document.getElementById('item-notes').value = item.notes || '';
+    document.getElementById('item-barcode').value = item.barcode || '';
+    document.getElementById('item-author').value = item.author || '';
+    console.log("item-author", document.getElementById('item-author').value);
+
+    // Add scan button next to barcode input
+    const barcodeGroup = document.querySelector('label[for="item-barcode"]').parentElement;
+    if (!barcodeGroup.querySelector('.scan-barcode-btn')) {
+        const scanBtn = document.createElement('button');
+        scanBtn.type = 'button';
+        scanBtn.className = 'scan-barcode-btn';
+        scanBtn.textContent = 'סרוק ברקוד';
+        scanBtn.onclick = function() {
+            startBarcodeScanner();
+            // Update barcode field when scan is complete
+            Quagga.onDetected(function(result) {
+                const code = result.codeResult.code;
+                document.getElementById('item-barcode').value = code;
+                stopBarcodeScanner();
+            });
+        };
+        barcodeGroup.appendChild(scanBtn);
+    }
+    console.log("itemModal", itemModal);
+    itemModal.classList.remove('hidden');
+    itemModal.style.display = "block";
 }
 
 // Save Item
@@ -215,15 +258,23 @@ function saveItem(e) {
 
     if (editingItemId) {
         // Update existing item
-        database.ref(`${currentCategory}/${editingItemId}`).update(itemData)
-            .then(() => {
-                console.log('Item updated successfully');
+        const itemRef = database.ref(`${currentCategory}/${editingItemId}`);
+        itemRef.once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                itemRef.update(itemData)
+                    .then(() => {
+                        console.log('Item updated successfully');
+                        hideModal();
+                    })
+                    .catch(error => {
+                        console.error('Error updating item:', error);
+                        alert('שגיאה בעדכון הפריט. אנא נסה שוב.');
+                    });
+            } else {
+                alert('הפריט לא נמצא במערכת. ייתכן שנמחק.');
                 hideModal();
-            })
-            .catch(error => {
-                console.error('Error updating item:', error);
-                alert('שגיאה בעדכון הפריט. אנא נסה שוב.');
-            });
+            }
+        });
     } else {
         // Add new item
         database.ref(currentCategory).push(itemData)
@@ -236,21 +287,6 @@ function saveItem(e) {
                 alert('שגיאה בהוספת הפריט. אנא נסה שוב.');
             });
     }
-}
-
-// Edit Item
-function editItem(itemId) {
-    editingItemId = itemId;
-    const item = currentItems.find(i => i.id === itemId);
-    console.log(item);
-    document.getElementById('modal-title').textContent = 'ערוך פריט';
-    document.getElementById('item-description').value = item.description || '';
-    document.getElementById('item-location').value = item.location || '';
-    document.getElementById('item-notes').value = item.notes || '';
-    document.getElementById('item-barcode').value = item.barcode || '';
-    document.getElementById('item-author').value = item.author || '';
-    
-    itemModal.classList.remove('hidden');
 }
 
 // Delete Item
@@ -272,31 +308,55 @@ function startBarcodeScanner() {
             constraints: {
                 width: 640,
                 height: 480,
-                facingMode: "environment"
+                facingMode: "environment",
+                aspectRatio: { min: 1, max: 2 }
             },
         },
+        locator: {
+            patchSize: "medium",
+            halfSample: true
+        },
+        numOfWorkers: 4,
         decoder: {
-            readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader"]
-        }
+            readers: ["ean_reader", "ean_8_reader", "code_128_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader"],
+            debug: {
+                drawBoundingBox: true,
+                drawPattern: true
+            }
+        },
+        locate: true
     }, function(err) {
         if (err) {
             console.error(err);
-            alert('שגיאה בהפעלת הסורק');
+            alert('שגיאה בהפעלת הסורק. אנא בדוק שהמצלמה זמינה.');
+            stopBarcodeScanner();
             return;
         }
         Quagga.start();
         scannerIsLive = true;
     });
 
+    let lastResult = null;
+    let lastResultTime = 0;
+
     Quagga.onDetected(function(result) {
         const code = result.codeResult.code;
+        const currentTime = Date.now();
+        
+        // Prevent duplicate scans within 1 second
+        if (lastResult === code && (currentTime - lastResultTime) < 1000) {
+            return;
+        }
+        
+        lastResult = code;
+        lastResultTime = currentTime;
+        
         stopBarcodeScanner();
         searchByBarcode(code);
     });
 }
 
 function stopBarcodeScanner() {
-
     if (scannerIsLive) {
         Quagga.stop();
     }
@@ -305,7 +365,6 @@ function stopBarcodeScanner() {
     console.log("!!stopped scanner");
     
     scannerIsLive = false;
-
 }
 
 function searchByBarcode(barcode) {
