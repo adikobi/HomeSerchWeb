@@ -1,5 +1,5 @@
 // Global variables
-let currentCategory = null;
+let currentCategory = "books";
 let currentItems = [];
 let editingItemId = null;
 let scannerIsLive = false;

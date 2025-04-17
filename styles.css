@@ -1,3 +1,23 @@
+:root {
+    --primary-color: #DCD7C9;
+    --primary-light: #DCD7C9;    
+    --error-color: #774360;
+    --error-dark: #774360;
+    --text-color: #E0E0E0;
+    --text-light: #FFFFFF;
+    --background-color: #1E1E1E;
+    --card-background: #2D2D2D;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --modal-background: rgba(0, 0, 0, 0.7);
+    --input-background: #333333;
+    --input-border: #404040;
+    --button-gradient-start: #2C3333;
+    --button-gradient-end: #2C3333;
+    --error-gradient-start: #774360;
+    --error-gradient-end: #774360;
+    --btn-color: #395B64;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +26,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #E1EEBC 0%, #90C67C 100%);
+    background: linear-gradient(135deg, #121212 0%, #1E1E1E 100%);
     min-height: 100vh;
     padding: 20px;
 }
@@ -14,27 +34,55 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: white;
+    background-color: var(--background-color);
     border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 8px 16px var(--shadow-color);
     padding: 30px;
 }
 
 header {
-    text-align: center;
     margin-bottom: 40px;
-    position: relative;
+    
 }
 
 h1 {
-    color: #328E6E;
+    text-align: center;
+
+    color: var(--text-light);
     font-size: 2.5rem;
     margin-bottom: 10px;
-    font-weight: 700;
+    font-weight: 700; 
+    
+    float: center;
+    margin-right: 30px;
 }
 
+.logout-btn {
+    padding: 8px 8px;
+    font-size: 12px;
+    background-color: var(--error-gradient-start);
+    color: var(--text-light);
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+    
+    float: left;
+
+}
+
+
+
+/* 
+h1 {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 24px;
+    float: center;
+} */
+
 h2 {
-    color: #67AE6E;
+    color: var(--primary-light);
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -56,16 +104,16 @@ h2 {
     font-size: 1.1rem;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+    color: var(--text-light);
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .category-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(50, 142, 110, 0.3);
+    box-shadow: 0 6px 12px var(--shadow-color);
 }
 
 /* Search and Add Section */
@@ -81,38 +129,52 @@ h2 {
     display: flex;
     gap: 10px;
     min-width: 300px;
+    
 }
 
 #search-input {
     flex: 1;
     padding: 12px 20px;
-    border: 2px solid #90C67C;
+    border: 2px solid var(--text-color);
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
+    
 }
 
 #search-input:focus {
-    border-color: #328E6E;
+    border-color: var(--primary-color);
     outline: none;
     box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+}
+
+.search-btn {
+    padding: 12px 12px;
+    border: none;
+    border-radius: 12px;
+    background: var(--error-color);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .action-btn {
     padding: 12px 25px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #67AE6E 0%, #90C67C 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+    color: var(--text-light);
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .action-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(50, 142, 110, 0.3);
+    box-shadow: 0 6px 12px var(--shadow-color);
 }
 
 /* Items List */
@@ -127,28 +189,28 @@ h2 {
 }
 
 .item-card {
-    background-color: white;
+    background-color: var(--card-background);
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.1);
+    box-shadow: 0 4px 8px var(--shadow-color);
     transition: all 0.3s ease;
-    border: 1px solid #E1EEBC;
+    border: 1px solid var(--input-border);
 }
 
 .item-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 8px 16px var(--shadow-color);
 }
 
 .item-card h3 {
-    color: #900C3F;
+    color: var(--text-light);
     margin-bottom: 15px;
     font-size: 1.2rem;
     font-weight: 600;
 }
 
 .item-card p {
-    color: #581845;
+    color: var(--text-color);
     margin-bottom: 8px;
     line-height: 1.5;
 }
@@ -169,18 +231,18 @@ h2 {
 }
 
 .edit-btn {
-    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
-    color: white;
+    background: var(--btn-color);
+    color: var(--text-light);
 }
 
 .delete-btn {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--error-gradient-start) 0%, var(--error-gradient-end) 100%);
+    color: var(--text-light);
 }
 
 .edit-btn:hover, .delete-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 /* Modal */
@@ -191,19 +253,19 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--background-color);
     z-index: 1000;
     backdrop-filter: blur(5px);
 }
 
 .modal-content {
-    background-color: white;
+    background-color: var(--card-background);
     margin: 50px auto;
     padding: 30px;
     border-radius: 16px;
     max-width: 500px;
     position: relative;
-    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 8px 16px var(--shadow-color);
 }
 
 .close-btn {
@@ -212,12 +274,12 @@ h2 {
     left: 15px;
     font-size: 24px;
     cursor: pointer;
-    color: #67AE6E;
+    color: var(--primary-light);
     transition: color 0.3s ease;
 }
 
 .close-btn:hover {
-    color: #328E6E;
+    color: var(--primary-color);
 }
 
 .form-group {
@@ -227,23 +289,26 @@ h2 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #328E6E;
+    color: var(--primary-color);
     font-weight: 500;
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+#auth-modal input {
     width: 100%;
     padding: 12px;
-    border: 2px solid #90C67C;
+    border: 2px solid var(--input-border);
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
+    background-color: var(--input-background);
+    color: var(--text-color);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: #328E6E;
+    border-color: var(--primary-color);
     outline: none;
     box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
 }
@@ -256,8 +321,8 @@ h2 {
 #save-item-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #67AE6E 0%, #90C67C 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+    color: var(--text-light);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -269,8 +334,9 @@ h2 {
 
 #save-item-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 6px 12px var(--shadow-color);
 }
+
 
 /* Barcode Scanner */
 #scanner-container {
@@ -279,7 +345,7 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: var(--modal-background);
     z-index: 2000;
     display: flex;
     flex-direction: column;
@@ -300,8 +366,8 @@ h2 {
 #stop-scan-btn {
     margin-top: 20px;
     padding: 12px 25px;
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    color: white;
+    background: var(--btn-color);
+    color: var(--text-light);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -311,15 +377,15 @@ h2 {
 
 #stop-scan-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 /* Scan Barcode Button in Form */
 .scan-barcode-btn {
     margin-top: 8px;
     padding: 8px 16px;
-    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
-    color: white;
+    background: var(--btn-color);
+    color: var(--text-light);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -329,7 +395,7 @@ h2 {
 
 .scan-barcode-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 /* Authentication Modal */
@@ -342,16 +408,16 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--background-color);
     z-index: 1000;
     backdrop-filter: blur(5px);
 }
 
 #auth-modal .modal-content {
-    background-color: white;
+    background-color: var(--card-background);
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 8px 16px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 8px 16px var(--shadow-color);
     width: 100%;
     max-width: 400px;
 }
@@ -363,20 +429,12 @@ h2 {
 #auth-modal label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #328E6E;
+    color: var(--primary-color);
     font-weight: 500;
 }
 
-#auth-modal input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #90C67C;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-}
-
 #auth-modal input:focus {
-    border-color: #328E6E;
+    border-color: var(--primary-color);
     outline: none;
     box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
 }
@@ -385,8 +443,8 @@ h2 {
     width: 100%;
     padding: 0.75rem;
     margin-top: 1rem;
-    background: linear-gradient(135deg, #67AE6E 0%, #90C67C 100%);
-    color: white;
+    background: var(--btn-color);
+    color: var(--text-light);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -396,15 +454,15 @@ h2 {
 
 #auth-modal button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 #auth-modal #register-btn {
-    background: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
+    background: var(--btn-color);
 }
 
 /* Logout Button */
-.logout-btn {
+/* .logout-btn {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -421,7 +479,11 @@ h2 {
 .logout-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
-}
+} */
+
+
+
+
 
 /* Hidden Class */
 .hidden {
