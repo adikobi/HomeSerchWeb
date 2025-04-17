@@ -322,100 +322,142 @@ function deleteItem(itemId) {
 }
 
 // Barcode Scanner
-function startBarcodeScanner(search = true) {
-    return new Promise((resolve, reject) => {
-        scannerContainer.classList.remove('hidden');
+function startBarcodeScanner(search=true) {
+    scannerContainer.classList.remove('hidden');
+    
+    // iOS specific configuration
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const constraints = isIOS ? {
+        width: { min: 640, ideal: 1280, max: 1920 },
+        height: { min: 480, ideal: 720, max: 1080 },
+        facingMode: "environment",
+        aspectRatio: { min: 1, max: 2 }
+    } : {
+        width: 640,
+        height: 480,
+        facingMode: "environment",
+        aspectRatio: { min: 1, max: 2 }
+    };
 
-        Quagga.init({
-            inputStream: {
-                name: "Live",
-                type: "LiveStream",
-                target: document.querySelector("#interactive"),
-                constraints: {
-                    width: 640,
-                    height: 480,
-                    facingMode: "environment",
-                    aspectRatio: { min: 1, max: 2 }
-                },
-            },
-            locator: {
-                patchSize: "medium",
-                halfSample: true
-            },
-            numOfWorkers: 4,
-            decoder: {
-                readers: ["ean_reader", "ean_8_reader", "upc_reader", "upc_e_reader"]
-            },
-            locate: true
-        }, function (err) {
-            if (err) {
-                console.error(err);
-                alert('שגיאה בהפעלת הסורק. אנא בדוק שהמצלמה זמינה.');
-                stopBarcodeScanner();
-                reject(err);
+    Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.querySelector("#interactive"),
+            constraints: constraints,
+            area: { // defines region of the image in which to look for barcodes
+                top: "0%",    // top offset
+                right: "0%",  // right offset
+                left: "0%",   // left offset
+                bottom: "0%"  // bottom offset
+            }
+        },
+        locator: {
+            patchSize: "medium",
+            halfSample: true
+        },
+        numOfWorkers: isIOS ? 2 : 4, // Reduce workers for iOS
+        decoder: {
+            readers: ["ean_reader", "ean_8_reader", "upc_reader", "upc_e_reader"]
+        },
+        locate: true
+    }, function(err) {
+        if (err) {
+            console.error(err);
+            alert('שגיאה בהפעלת הסורק. אנא בדוק שהמצלמה זמינה.');
+            stopBarcodeScanner();
+            return;
+        }
+        
+        // iOS specific adjustments
+        if (isIOS) {
+            const video = document.querySelector("#interactive video");
+            if (video) {
+                video.style.transform = "scaleX(-1)"; // Flip video for iOS
+                video.style.webkitTransform = "scaleX(-1)";
+            }
+        }
+        
+        Quagga.start();
+        scannerIsLive = true;
+    });
+ 
+    let lastDetectedCode = null;
+    let consecutiveCount = 0;
+    const requiredMatches = isIOS ? 3 : 5; // Reduce required matches for iOS
+    const resultCooldown = 2000;
+    let lastAcceptedTime = 0;
+    let codeHistory = [];
+    const codeHistorySize = 3;
+    
+    Quagga.onDetected(function(result) {
+        const codeResult = result.codeResult;
+        const now = Date.now();
+    
+        if (!codeResult || !codeResult.code) {
+            console.log("⛔️ No valid code detected.");
+            return;
+        }
+    
+        const code = codeResult.code;
+        
+        // בדיקת תקינות הברקוד
+        if (!isValidBarcode(code)) {
+            console.log(`❌ Invalid barcode format: ${code}`);
+            return;
+        }
+    
+        console.log(`📦 Detected barcode: ${code}`);
+    
+        // הוספת הקוד להיסטוריה
+        codeHistory.push(code);
+        if (codeHistory.length > codeHistorySize) {
+            codeHistory.shift();
+        }
+    
+        // בדיקה אם כל הקודים בהיסטוריה זהים
+        const allSame = codeHistory.every(c => c === code);
+    
+        if (code === lastDetectedCode) {
+            consecutiveCount++;
+        } else {
+            console.log(`🔁 New code detected. Resetting count. Previous: ${lastDetectedCode}, Current: ${code}`);
+            lastDetectedCode = code;
+            consecutiveCount = 1;
+            codeHistory = [code];
+        }
+    
+        console.log(`🔍 Count for ${code}: ${consecutiveCount}/${requiredMatches} (History: ${codeHistory.join(', ')})`);
+    
+        if (consecutiveCount >= requiredMatches && allSame) {
+            if (now - lastAcceptedTime < resultCooldown) {
+                console.log(`⏱ Barcode ${code} accepted recently. Ignoring.`);
                 return;
             }
-            Quagga.start();
-            scannerIsLive = true;
-        });
-
-        let lastDetectedCode = null;
-        let consecutiveCount = 0;
-        const requiredMatches = 5;
-        const resultCooldown = 2000;
-        let lastAcceptedTime = 0;
-        let codeHistory = [];
-        const codeHistorySize = 3;
-
-        Quagga.onDetected(function (result) {
-            const codeResult = result.codeResult;
-            const now = Date.now();
-
-            if (!codeResult || !codeResult.code) return;
-
-            const code = codeResult.code;
-
-            if (!isValidBarcode(code)) return;
-
-            codeHistory.push(code);
-            if (codeHistory.length > codeHistorySize) codeHistory.shift();
-
-            const allSame = codeHistory.every(c => c === code);
-
-            if (code === lastDetectedCode) {
-                consecutiveCount++;
+    
+            console.log(`✅ Barcode accepted: ${code}`);
+            lastAcceptedTime = now;
+    
+            // איפוס הכל לאחר קבלת ברקוד
+            lastDetectedCode = null;
+            consecutiveCount = 0;
+            codeHistory = [];
+    
+            stopBarcodeScanner();
+    
+            if (search) {
+                console.log("🔍 Performing search for barcode...");
+                searchByBarcode(code);
             } else {
-                lastDetectedCode = code;
-                consecutiveCount = 1;
-                codeHistory = [code];
-            }
-
-            if (consecutiveCount >= requiredMatches && allSame) {
-                if (now - lastAcceptedTime < resultCooldown) return;
-
-                lastAcceptedTime = now;
-
-                // Reset state
-                lastDetectedCode = null;
-                consecutiveCount = 0;
-                codeHistory = [];
-
-                stopBarcodeScanner();
-
-                if (search) {
-                    console.log("🔥 searchByBarcode", code);
-                    searchByBarcode(code);
-                } else {
-                    console.log(" editingItemId", editingItemId);
-                    // if (editingItemId) {
-                    //     itemModal.classList.remove('hidden');
-                    //     document.getElementById('item-barcode').value = code;
-                    // }
+                console.log("📝 Setting barcode in input field.");
+                document.getElementById('item-barcode').value = code;
+                // אם אנחנו בעריכה, נחזיר את המודל למצב גלוי
+                if (editingItemId) {
+                    itemModal.classList.remove('hidden');
                 }
-
-                resolve(code); // 🔥 return the code
+                resolve(code);
             }
-        });
+        }
     });
 }
 
