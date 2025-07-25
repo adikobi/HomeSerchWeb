@@ -58,8 +58,11 @@
                     <input type="text" id="search-input" placeholder="חיפוש פריטים...">
                     <button id="search-btn" class="search-btn">חיפוש</button>
                 </div>
-                <button id="add-item-btn" class="action-btn">הוסף פריט חדש</button>
-                <button id="scan-barcode-btn" class="action-btn">סרוק ברקוד</button>
+                <div class="addScan-container">
+                    <button id="add-item-btn" class="action-btn">הוסף פריט חדש</button>
+                    <button id="scan-barcode-btn" class="action-btn">סרוק ברקוד</button>
+                </div>
+              
             </div>
 
             <!-- Items List -->
@@ -92,6 +95,10 @@
                         <label for="item-description">שם הפריט:</label>
                         <input type="text" id="item-description" required>
                     </div>
+                    <div class="form-group" id="author-group">
+                        <label for="item-author">סופר:</label>
+                        <input type="text" id="item-author">
+                    </div>
                     <div class="form-group">
                         <label for="item-location">מיקום:</label>
                         <input type="text" id="item-location" required>
@@ -104,10 +111,7 @@
                         <label for="item-barcode">ברקוד:</label>
                         <input type="text" id="item-barcode">
                     </div>
-                    <div class="form-group" id="author-group">
-                        <label for="item-author">מחבר:</label>
-                        <input type="text" id="item-author">
-                    </div>
+                    
                     <button type="submit" id="save-item-btn">שמור</button>
                 </form>
             </div>
