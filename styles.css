@@ -1,21 +1,13 @@
 :root {
-    --primary-color: #DCD7C9;
-    --primary-light: #DCD7C9;    
-    --error-color: #774360;
-    --error-dark: #774360;
-    --text-color: #E0E0E0;
-    --text-light: #FFFFFF;
-    --background-color: #1E1E1E;
-    --card-background: #2D2D2D;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --modal-background: rgba(0, 0, 0, 0.7);
-    --input-background: #333333;
-    --input-border: #404040;
-    --button-gradient-start: #2C3333;
-    --button-gradient-end: #2C3333;
-    --error-gradient-start: #774360;
-    --error-gradient-end: #774360;
-    --btn-color: #395B64;
+  --dark-bg: #121212;
+  --light-bg: #1E1E1E;
+  --off-white: #fcfaf7;
+  --white: #ffffff;
+  --yellow: #F6E05E;
+  --green: #48BB78;
+  --pink: #ED64A6;
+  --light-blue: #63B3ED;
+  --transparent-white: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -26,7 +18,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #121212 0%, #1E1E1E 100%);
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--light-bg) 100%);
     min-height: 100vh;
     padding: 20px;
 }
@@ -34,41 +26,61 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: var(--background-color);
+    background-color: var(--light-bg);
     border-radius: 20px;
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 24px var(--transparent-white);
     padding: 30px;
 }
 
 header {
     margin-bottom: 40px;
-    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.header-logo {
+    width: 50px;
+    height: 50px;
+    margin-left: 15px;
 }
 
 h1 {
     text-align: center;
 
-    color: var(--text-light);
+    color: var(--white);
     font-size: 2.5rem;
     margin-bottom: 10px;
     font-weight: 700; 
     
     float: center;
-    margin-right: 30px;
+    margin-right: 0;
 }
 
 .logout-btn {
     padding: 8px 8px;
     font-size: 12px;
-    background-color: var(--error-gradient-start);
-    color: var(--text-light);
+    background-color: var(--pink);
+    color: var(--white);
     border: none;
     border-radius: 5px;
-
+    transition: all 0.3s ease;
     cursor: pointer;
     
     float: left;
 
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--transparent-white);
 }
 
 
@@ -82,7 +94,7 @@ h1 {
 } */
 
 h2 {
-    color: var(--primary-light);
+    color: var(--white);
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -103,16 +115,16 @@ h2 {
     font-size: 1.1rem;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-    color: var(--text-light);
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--green) 100%);
+    color: var(--white);
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .category-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Search and Add Section */
@@ -134,7 +146,7 @@ h2 {
 #search-input {
     flex: 1;
     padding: 12px 20px;
-    border: 2px solid var(--text-color);
+    border: 2px solid var(--transparent-white);
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -142,21 +154,21 @@ h2 {
 }
 
 #search-input:focus {
-    border-color: var(--primary-color);
+    border-color: var(--yellow);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+    box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
 }
 
 .search-btn {
     padding: 12px 12px;
     border: none;
     border-radius: 12px;
-    background: var(--error-color);
-    color: var(--text-light);
+    background: var(--pink);
+    color: var(--white);
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .addScan-container {
@@ -172,17 +184,17 @@ h2 {
     padding: 12px 25px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-    color: var(--text-light);
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--green) 100%);
+    color: var(--white);
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .action-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Items List */
@@ -197,28 +209,28 @@ h2 {
 }
 
 .item-card {
-    background-color: var(--card-background);
+    background-color: var(--light-bg);
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--transparent-white);
 }
 
 .item-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .item-card h3 {
-    color: var(--text-light);
+    color: var(--white);
     margin-bottom: 15px;
     font-size: 1.2rem;
     font-weight: 600;
 }
 
 .item-card p {
-    color: var(--text-color);
+    color: var(--off-white);
     margin-bottom: 8px;
     line-height: 1.5;
 }
@@ -239,18 +251,18 @@ h2 {
 }
 
 .edit-btn {
-    background: var(--btn-color);
-    color: var(--text-light);
+    background: var(--light-blue);
+    color: var(--white);
 }
 
 .delete-btn {
-    background: linear-gradient(135deg, var(--error-gradient-start) 0%, var(--error-gradient-end) 100%);
-    color: var(--text-light);
+    background: var(--pink);
+    color: var(--white);
 }
 
 .edit-btn:hover, .delete-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Modal */
@@ -261,19 +273,19 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--background-color);
+    background-color: var(--dark-bg);
     z-index: 1000;
     backdrop-filter: blur(5px);
 }
 
 .modal-content {
-    background-color: var(--card-background);
+    background-color: var(--light-bg);
     margin: 20px auto;
     padding: 30px;
     border-radius: 16px;
     max-width: 500px;
     position: relative;
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .close-btn {
@@ -282,12 +294,12 @@ h2 {
     left: 15px;
     font-size: 24px;
     cursor: pointer;
-    color: var(--primary-light);
+    color: var(--white);
     transition: color 0.3s ease;
 }
 
 .close-btn:hover {
-    color: var(--primary-color);
+    color: var(--yellow);
 }
 
 .form-group {
@@ -297,7 +309,7 @@ h2 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: var(--primary-color);
+    color: var(--yellow);
     font-weight: 500;
 }
 
@@ -306,19 +318,19 @@ h2 {
 #auth-modal input {
     width: 100%;
     padding: 12px;
-    border: 2px solid var(--input-border);
+    border: 2px solid var(--transparent-white);
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background-color: var(--input-background);
-    color: var(--text-color);
+    background-color: var(--light-bg);
+    color: var(--off-white);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: var(--primary-color);
+    border-color: var(--yellow);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+    box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
 }
 
 .form-group textarea {
@@ -329,8 +341,8 @@ h2 {
 #save-item-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-    color: var(--text-light);
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--green) 100%);
+    color: var(--white);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -342,7 +354,7 @@ h2 {
 
 #save-item-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -353,7 +365,7 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--modal-background);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 2000;
     display: flex;
     flex-direction: column;
@@ -374,8 +386,8 @@ h2 {
 #stop-scan-btn {
     margin-top: 20px;
     padding: 12px 25px;
-    background: var(--btn-color);
-    color: var(--text-light);
+    background: var(--light-blue);
+    color: var(--white);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -385,15 +397,15 @@ h2 {
 
 #stop-scan-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Scan Barcode Button in Form */
 .scan-barcode-btn {
     margin-top: 8px;
     padding: 8px 16px;
-    background: var(--btn-color);
-    color: var(--text-light);
+    background: var(--light-blue);
+    color: var(--white);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -403,7 +415,7 @@ h2 {
 
 .scan-barcode-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Authentication Modal */
@@ -416,16 +428,16 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--background-color);
+    background-color: var(--dark-bg);
     z-index: 1000;
     backdrop-filter: blur(5px);
 }
 
 #auth-modal .modal-content {
-    background-color: var(--card-background);
+    background-color: var(--light-bg);
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     width: 100%;
     max-width: 400px;
 }
@@ -437,22 +449,22 @@ h2 {
 #auth-modal label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--primary-color);
+    color: var(--yellow);
     font-weight: 500;
 }
 
 #auth-modal input:focus {
-    border-color: var(--primary-color);
+    border-color: var(--yellow);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+    box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
 }
 
 #auth-modal button {
     width: 100%;
     padding: 0.75rem;
     margin-top: 1rem;
-    background: var(--btn-color);
-    color: var(--text-light);
+    background: var(--light-blue);
+    color: var(--white);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -462,11 +474,11 @@ h2 {
 
 #auth-modal button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 #auth-modal #register-btn {
-    background: var(--btn-color);
+    background: var(--green);
 }
 
 /* Logout Button */
@@ -516,4 +528,43 @@ h2 {
         margin: 20px;
         width: auto;
     }
-} 
+}
+
+/* Splash Screen */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-bg, #121212);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-logo {
+    width: 150px;
+    height: 150px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

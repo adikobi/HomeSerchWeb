@@ -1,3 +1,10 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const splashScreen = document.getElementById('splash-screen');
+    setTimeout(() => {
+        splashScreen.classList.add('hidden');
+    }, 2000); // 2 second delay
+});
+
 // Global variables
 let currentCategory = "books";
 let currentItems = [];
