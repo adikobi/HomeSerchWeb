@@ -350,9 +350,10 @@ function startBarcodeScanner(search=true) {
     scannerContainer.classList.remove('hidden');
     
     const constraints = {
-        width: { min: 1280, ideal: 1920, max: 2560 },
-        height: { min: 720, ideal: 1080, max: 1440 },
         facingMode: "environment",
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        aspectRatio: { ideal: 16/9 }
     };
 
     Quagga.init({
@@ -372,7 +373,7 @@ function startBarcodeScanner(search=true) {
             patchSize: "large",
             halfSample: false
         },
-        numOfWorkers: isIOS ? 2 : 4, // Reduce workers for iOS
+        numOfWorkers: navigator.hardwareConcurrency || 4,
         decoder: {
             readers: ["ean_reader", "ean_8_reader", "upc_reader", "upc_e_reader"]
         },
