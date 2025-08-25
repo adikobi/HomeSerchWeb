@@ -349,18 +349,10 @@ function deleteItem(itemId) {
 function startBarcodeScanner(search=true) {
     scannerContainer.classList.remove('hidden');
     
-    // iOS specific configuration
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const constraints = isIOS ? {
-        width: { min: 640, ideal: 1280, max: 1920 },
-        height: { min: 480, ideal: 720, max: 1080 },
+    const constraints = {
+        width: { min: 1280, ideal: 1920, max: 2560 },
+        height: { min: 720, ideal: 1080, max: 1440 },
         facingMode: "environment",
-        aspectRatio: { min: 1, max: 2 }
-    } : {
-        width: 640,
-        height: 480,
-        facingMode: "environment",
-        aspectRatio: { min: 1, max: 2 }
     };
 
     Quagga.init({
@@ -370,15 +362,15 @@ function startBarcodeScanner(search=true) {
             target: document.querySelector("#interactive"),
             constraints: constraints,
             area: { // defines region of the image in which to look for barcodes
-                top: "0%",    // top offset
-                right: "0%",  // right offset
-                left: "0%",   // left offset
-                bottom: "0%"  // bottom offset
+                top: "25%",    // top offset
+                right: "10%",  // right offset
+                left: "10%",   // left offset
+                bottom: "25%"  // bottom offset
             }
         },
         locator: {
-            patchSize: "medium",
-            halfSample: true
+            patchSize: "large",
+            halfSample: false
         },
         numOfWorkers: isIOS ? 2 : 4, // Reduce workers for iOS
         decoder: {
