@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         splashScreen.classList.add('hidden');
     }, 2000); // 2 second delay
+
+    // Set initial active category
+    document.getElementById('books-btn').classList.add('active');
 });
 
 // Global variables
@@ -107,6 +110,12 @@ if (stopScanBtn) {
 // Category Selection
 function selectCategory(category) {
     currentCategory = category;
+
+    // Update active button
+    const buttons = document.querySelectorAll('.category-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`${category}-btn`).classList.add('active');
+
     authorGroup.style.display = category === 'books' ? 'block' : 'none';
     loadItems();
 }
