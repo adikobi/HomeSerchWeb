@@ -1,3 +1,13 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const splashScreen = document.getElementById('splash-screen');
+    setTimeout(() => {
+        splashScreen.classList.add('hidden');
+    }, 2000); // 2 second delay
+
+    // Set initial active category
+    document.getElementById('books-btn').classList.add('active');
+});
+
 // Global variables
 let currentCategory = "books";
 let currentItems = [];
@@ -100,6 +110,12 @@ if (stopScanBtn) {
 // Category Selection
 function selectCategory(category) {
     currentCategory = category;
+
+    // Update active button
+    const buttons = document.querySelectorAll('.category-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`${category}-btn`).classList.add('active');
+
     authorGroup.style.display = category === 'books' ? 'block' : 'none';
     loadItems();
 }
@@ -156,8 +172,8 @@ function createItemCard(item) {
         ${item.barcode ? `<p><strong>ברקוד:</strong> ${item.barcode}</p>` : ''}
         ${item.author ? `<p><strong>מחבר:</strong> ${item.author}</p>` : ''}
         <div class="item-actions">
-            <button class="edit-btn" onclick="editItem('${item.id}')">ערוך</button>
-            <button class="delete-btn" onclick="deleteItem('${item.id}')">מחק</button>
+            <button class="btn edit-btn" onclick="editItem('${item.id}')">ערוך</button>
+            <button class="btn delete-btn" onclick="deleteItem('${item.id}')">מחק</button>
         </div>
     `;
     return card;
@@ -199,7 +215,7 @@ function showAddItemModal() {
 
         const scanBtn = document.createElement('button');
         scanBtn.type = 'button';
-        scanBtn.className = 'scan-barcode-btn action-btn';
+        scanBtn.className = 'scan-barcode-btn btn';
         scanBtn.textContent = 'סרוק';
         scanBtn.onclick = function() {
             startBarcodeScanner(false).then(code => {
@@ -251,7 +267,7 @@ function editItem(itemId) {
 
         const scanBtn = document.createElement('button');
         scanBtn.type = 'button';
-        scanBtn.className = 'scan-barcode-btn action-btn';
+        scanBtn.className = 'scan-barcode-btn btn';
         scanBtn.textContent = 'סרוק';
         scanBtn.onclick = function() {
             startBarcodeScanner(false).then(code => {
@@ -542,4 +558,4 @@ document.getElementById('item-category').addEventListener('change', function() {
     const selectedCategory = this.value;
     const authorGroup = document.getElementById('author-group');
     authorGroup.style.display = selectedCategory === 'books' ? 'block' : 'none';
-}); 
+});
