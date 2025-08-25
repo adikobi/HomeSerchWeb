@@ -36,43 +36,31 @@ body {
 
 header {
     margin-bottom: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-}
-
-.header-logo {
-    width: 50px;
-    height: 50px;
-    margin-left: 15px;
+    position: relative;
+    text-align: center;
 }
 
 h1 {
-    text-align: center;
     color: var(--white);
     font-size: 2.5rem;
     margin-bottom: 10px;
     font-weight: 700; 
-    float: center;
-    margin-right: 0;
+    display: inline-block;
 }
 
 .logout-btn {
     background: none;
     border: 1px solid var(--pink);
     color: var(--pink);
-    border-radius: 6px;
+    border-radius: 16px;
     padding: 0.4rem 0.8rem;
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .logout-btn:hover {
@@ -124,7 +112,7 @@ h2 {
 .btn {
     background: none;
     border: 1px solid;
-    border-radius: 8px;
+    border-radius: 16px;
     padding: 12px 25px;
     cursor: pointer;
     font-weight: 600;
@@ -165,13 +153,13 @@ h2 {
 }
 
 .search-btn {
-    border-color: var(--pink);
-    color: var(--pink);
+    background-color: var(--pink);
+    color: var(--dark-bg);
+    border: none;
 }
 
 .search-btn:hover {
-    background-color: var(--pink);
-    color: var(--dark-bg);
+    filter: brightness(1.1);
 }
 
 .addScan-container {
@@ -186,13 +174,13 @@ h2 {
 }
 
 #add-item-btn {
-    border-color: var(--green);
-    color: var(--green);
+    background-color: var(--light-blue);
+    color: var(--dark-bg);
+    border: none;
 }
 
 #add-item-btn:hover {
-    background-color: var(--green);
-    color: var(--dark-bg);
+    filter: brightness(1.1);
 }
 
 #scan-barcode-btn {
@@ -389,12 +377,12 @@ h2 {
     padding: 14px;
     font-size: 1.1rem;
     margin-top: 20px;
-    border-color: var(--green);
-    color: var(--green);
+    border-color: var(--off-white);
+    color: var(--off-white);
 }
 
 #save-item-btn:hover {
-    background-color: var(--green);
+    background-color: var(--off-white);
     color: var(--dark-bg);
 }
 
