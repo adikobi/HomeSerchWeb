@@ -1,13 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const splashScreen = document.getElementById('splash-screen');
-    setTimeout(() => {
-        splashScreen.classList.add('hidden');
-    }, 2000); // 2 second delay
-
-    // Set initial active category
-    document.getElementById('books-btn').classList.add('active');
-});
-
 // Global variables
 let currentCategory = "books";
 let currentItems = [];
@@ -110,12 +100,6 @@ if (stopScanBtn) {
 // Category Selection
 function selectCategory(category) {
     currentCategory = category;
-
-    // Update active button
-    const buttons = document.querySelectorAll('.category-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`${category}-btn`).classList.add('active');
-
     authorGroup.style.display = category === 'books' ? 'block' : 'none';
     loadItems();
 }
@@ -205,24 +189,30 @@ function showAddItemModal() {
     document.getElementById('item-author').value = '';
     document.getElementById('item-category').value = currentCategory || 'items';
     
-    // הוספת כפתור סריקה לשדה הברקוד
+    // Handle barcode input and scan button
     const barcodeGroup = document.querySelector('label[for="item-barcode"]').parentElement;
-    if (!barcodeGroup.querySelector('.scan-barcode-btn')) {
+    const barcodeInput = document.getElementById('item-barcode');
+
+    if (!barcodeGroup.querySelector('.form-group-inline')) {
+        const inlineContainer = document.createElement('div');
+        inlineContainer.className = 'form-group-inline';
+
         const scanBtn = document.createElement('button');
         scanBtn.type = 'button';
-        scanBtn.className = 'scan-barcode-btn';
-        scanBtn.textContent = 'סרוק ברקוד';
+        scanBtn.className = 'scan-barcode-btn action-btn';
+        scanBtn.textContent = 'סרוק';
         scanBtn.onclick = function() {
             startBarcodeScanner(false).then(code => {
                 console.log("Scanned barcode:", code);
                 document.getElementById('item-barcode').value = code;
-                
             }).catch(err => {
                 console.error("Scanning failed:", err);
             });
-            
         };
-        barcodeGroup.appendChild(scanBtn);
+
+        barcodeGroup.appendChild(inlineContainer);
+        inlineContainer.appendChild(barcodeInput);
+        inlineContainer.appendChild(scanBtn);
     }
     
     itemModal.classList.remove('hidden');
@@ -251,28 +241,30 @@ function editItem(itemId) {
     document.getElementById('item-author').value = item.author || '';
     document.getElementById('item-category').value = currentCategory;
     
-    // הוספת כפתור סריקה לשדה הברקוד
+    // Handle barcode input and scan button
     const barcodeGroup = document.querySelector('label[for="item-barcode"]').parentElement;
-    if (!barcodeGroup.querySelector('.scan-barcode-btn')) {
+    const barcodeInput = document.getElementById('item-barcode');
+
+    if (!barcodeGroup.querySelector('.form-group-inline')) {
+        const inlineContainer = document.createElement('div');
+        inlineContainer.className = 'form-group-inline';
+
         const scanBtn = document.createElement('button');
         scanBtn.type = 'button';
-        scanBtn.className = 'scan-barcode-btn';
-        scanBtn.textContent = 'סרוק ברקוד';
+        scanBtn.className = 'scan-barcode-btn action-btn';
+        scanBtn.textContent = 'סרוק';
         scanBtn.onclick = function() {
-
             startBarcodeScanner(false).then(code => {
                 console.log("Scanned barcode:", code);
                 document.getElementById('item-barcode').value = code;
-
             }).catch(err => {
                 console.error("Scanning failed:", err);
             });
-
-
-            
-            
         };
-        barcodeGroup.appendChild(scanBtn);
+
+        barcodeGroup.appendChild(inlineContainer);
+        inlineContainer.appendChild(barcodeInput);
+        inlineContainer.appendChild(scanBtn);
     }
     
     itemModal.classList.remove('hidden');
