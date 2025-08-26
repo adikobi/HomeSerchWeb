@@ -363,7 +363,8 @@ h2 {
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     border-color: var(--yellow);
     outline: none;
     box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
