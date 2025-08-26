@@ -386,22 +386,13 @@ function startBarcodeScanner(search=true) {
             return;
         }
         
-        // iOS specific adjustments
-        if (isIOS) {
-            const video = document.querySelector("#interactive video");
-            if (video) {
-                video.style.transform = "scaleX(-1)"; // Flip video for iOS
-                video.style.webkitTransform = "scaleX(-1)";
-            }
-        }
-        
         Quagga.start();
         scannerIsLive = true;
     });
  
     let lastDetectedCode = null;
     let consecutiveCount = 0;
-    const requiredMatches = isIOS ? 3 : 5; // Reduce required matches for iOS
+    const requiredMatches = 3; // Lowered for better responsiveness
     const resultCooldown = 2000;
     let lastAcceptedTime = 0;
     let codeHistory = [];
