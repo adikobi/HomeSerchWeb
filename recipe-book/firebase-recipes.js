@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const recipeFirebaseConfig = {
@@ -16,5 +16,5 @@ const recipeFirebaseConfig = {
 // Initialize a new, secondary Firebase app
 const recipeApp = initializeApp(recipeFirebaseConfig, "recipe-book");
 
-// Get a reference to the Firestore service
-const recipeFirestore = getFirestore(recipeApp);
+// Get a reference to the Firestore service and export it
+export const recipeFirestore = getFirestore(recipeApp);

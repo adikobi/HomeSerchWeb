@@ -1,6 +1,6 @@
-// Import Firestore functions and the recipe-specific Firestore instance
+// Import Firestore functions from the full URL and the recipe-specific Firestore instance
 import {
-    getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, onSnapshot
+    collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 import { recipeFirestore } from './firebase-recipes.js';
 
@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Firestore Logic ---
     // NOTE: Using a hardcoded user ID for now.
-    // This should be replaced with dynamic user authentication in a real application.
     const USER_ID = "testUser";
     const notesCollectionRef = collection(recipeFirestore, "notes", USER_ID, "myNotes");
 
