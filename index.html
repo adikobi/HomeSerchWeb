@@ -51,10 +51,15 @@
             <!-- Category Selection -->
             <div class="category-selection">
                 <div class="category-buttons">
-                    <button id="books-btn" class="category-btn">ספרים</button>
+                    <button id="books-btn" class="category-btn active">ספרים</button>
                     <button id="food-btn" class="category-btn">מזון</button>
-                    <button id="items-btn" class="category-btn">פריטים</button>
-                    <a href="recipe-book/recipe-book.html"><button id="recipes-btn" class="category-btn">ספר מתכונים</button></a>
+                    <button id="recipes-btn" class="category-btn">ספר מתכונים</button>
+                    <div class="dropdown">
+                        <button id="more-btn" class="category-btn">...</button>
+                        <div id="dropdown-content" class="dropdown-content">
+                            <button id="items-btn" class="category-btn dropdown-item">פריטים</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
