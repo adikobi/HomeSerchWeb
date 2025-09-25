@@ -1,3 +1,13 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const splashScreen = document.getElementById('splash-screen');
+    setTimeout(() => {
+        splashScreen.classList.add('hidden');
+    }, 2000); // 2 second delay
+
+    // Set initial active category
+    document.getElementById('books-btn').classList.add('active');
+});
+
 // Global variables
 let currentCategory = "books";
 let currentItems = [];
@@ -100,6 +110,12 @@ if (stopScanBtn) {
 // Category Selection
 function selectCategory(category) {
     currentCategory = category;
+
+    // Update active button
+    const buttons = document.querySelectorAll('.category-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`${category}-btn`).classList.add('active');
+
     authorGroup.style.display = category === 'books' ? 'block' : 'none';
     loadItems();
 }
@@ -156,8 +172,8 @@ function createItemCard(item) {
         ${item.barcode ? `<p><strong>ברקוד:</strong> ${item.barcode}</p>` : ''}
         ${item.author ? `<p><strong>מחבר:</strong> ${item.author}</p>` : ''}
         <div class="item-actions">
-            <button class="edit-btn" onclick="editItem('${item.id}')">ערוך</button>
-            <button class="delete-btn" onclick="deleteItem('${item.id}')">מחק</button>
+            <button class="btn edit-btn" onclick="editItem('${item.id}')">ערוך</button>
+            <button class="btn delete-btn" onclick="deleteItem('${item.id}')">מחק</button>
         </div>
     `;
     return card;
@@ -189,24 +205,30 @@ function showAddItemModal() {
     document.getElementById('item-author').value = '';
     document.getElementById('item-category').value = currentCategory || 'items';
     
-    // הוספת כפתור סריקה לשדה הברקוד
+    // Handle barcode input and scan button
     const barcodeGroup = document.querySelector('label[for="item-barcode"]').parentElement;
-    if (!barcodeGroup.querySelector('.scan-barcode-btn')) {
+    const barcodeInput = document.getElementById('item-barcode');
+
+    if (!barcodeGroup.querySelector('.form-group-inline')) {
+        const inlineContainer = document.createElement('div');
+        inlineContainer.className = 'form-group-inline';
+
         const scanBtn = document.createElement('button');
         scanBtn.type = 'button';
-        scanBtn.className = 'scan-barcode-btn';
-        scanBtn.textContent = 'סרוק ברקוד';
+        scanBtn.className = 'scan-barcode-btn btn';
+        scanBtn.textContent = 'סרוק';
         scanBtn.onclick = function() {
             startBarcodeScanner(false).then(code => {
                 console.log("Scanned barcode:", code);
                 document.getElementById('item-barcode').value = code;
-                
             }).catch(err => {
                 console.error("Scanning failed:", err);
             });
-            
         };
-        barcodeGroup.appendChild(scanBtn);
+
+        barcodeGroup.appendChild(inlineContainer);
+        inlineContainer.appendChild(barcodeInput);
+        inlineContainer.appendChild(scanBtn);
     }
     
     itemModal.classList.remove('hidden');
@@ -235,28 +257,30 @@ function editItem(itemId) {
     document.getElementById('item-author').value = item.author || '';
     document.getElementById('item-category').value = currentCategory;
     
-    // הוספת כפתור סריקה לשדה הברקוד
+    // Handle barcode input and scan button
     const barcodeGroup = document.querySelector('label[for="item-barcode"]').parentElement;
-    if (!barcodeGroup.querySelector('.scan-barcode-btn')) {
+    const barcodeInput = document.getElementById('item-barcode');
+
+    if (!barcodeGroup.querySelector('.form-group-inline')) {
+        const inlineContainer = document.createElement('div');
+        inlineContainer.className = 'form-group-inline';
+
         const scanBtn = document.createElement('button');
         scanBtn.type = 'button';
-        scanBtn.className = 'scan-barcode-btn';
-        scanBtn.textContent = 'סרוק ברקוד';
+        scanBtn.className = 'scan-barcode-btn btn';
+        scanBtn.textContent = 'סרוק';
         scanBtn.onclick = function() {
-
             startBarcodeScanner(false).then(code => {
                 console.log("Scanned barcode:", code);
                 document.getElementById('item-barcode').value = code;
-
             }).catch(err => {
                 console.error("Scanning failed:", err);
             });
-
-
-            
-            
         };
-        barcodeGroup.appendChild(scanBtn);
+
+        barcodeGroup.appendChild(inlineContainer);
+        inlineContainer.appendChild(barcodeInput);
+        inlineContainer.appendChild(scanBtn);
     }
     
     itemModal.classList.remove('hidden');
@@ -325,18 +349,11 @@ function deleteItem(itemId) {
 function startBarcodeScanner(search=true) {
     scannerContainer.classList.remove('hidden');
     
-    // iOS specific configuration
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const constraints = isIOS ? {
-        width: { min: 640, ideal: 1280, max: 1920 },
-        height: { min: 480, ideal: 720, max: 1080 },
+    const constraints = {
         facingMode: "environment",
-        aspectRatio: { min: 1, max: 2 }
-    } : {
-        width: 640,
-        height: 480,
-        facingMode: "environment",
-        aspectRatio: { min: 1, max: 2 }
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        aspectRatio: { ideal: 16/9 }
     };
 
     Quagga.init({
@@ -346,17 +363,17 @@ function startBarcodeScanner(search=true) {
             target: document.querySelector("#interactive"),
             constraints: constraints,
             area: { // defines region of the image in which to look for barcodes
-                top: "0%",    // top offset
-                right: "0%",  // right offset
-                left: "0%",   // left offset
-                bottom: "0%"  // bottom offset
+                top: "25%",    // top offset
+                right: "10%",  // right offset
+                left: "10%",   // left offset
+                bottom: "25%"  // bottom offset
             }
         },
         locator: {
-            patchSize: "medium",
-            halfSample: true
+            patchSize: "large",
+            halfSample: false
         },
-        numOfWorkers: isIOS ? 2 : 4, // Reduce workers for iOS
+        numOfWorkers: navigator.hardwareConcurrency || 4,
         decoder: {
             readers: ["ean_reader", "ean_8_reader", "upc_reader", "upc_e_reader"]
         },
@@ -369,22 +386,13 @@ function startBarcodeScanner(search=true) {
             return;
         }
         
-        // iOS specific adjustments
-        if (isIOS) {
-            const video = document.querySelector("#interactive video");
-            if (video) {
-                video.style.transform = "scaleX(-1)"; // Flip video for iOS
-                video.style.webkitTransform = "scaleX(-1)";
-            }
-        }
-        
         Quagga.start();
         scannerIsLive = true;
     });
  
     let lastDetectedCode = null;
     let consecutiveCount = 0;
-    const requiredMatches = isIOS ? 3 : 5; // Reduce required matches for iOS
+    const requiredMatches = 3; // Lowered for better responsiveness
     const resultCooldown = 2000;
     let lastAcceptedTime = 0;
     let codeHistory = [];
@@ -395,7 +403,6 @@ function startBarcodeScanner(search=true) {
         const now = Date.now();
     
         if (!codeResult || !codeResult.code) {
-            console.log("⛔️ No valid code detected.");
             return;
         }
     
@@ -534,4 +541,4 @@ document.getElementById('item-category').addEventListener('change', function() {
     const selectedCategory = this.value;
     const authorGroup = document.getElementById('author-group');
     authorGroup.style.display = selectedCategory === 'books' ? 'block' : 'none';
-}); 
+});

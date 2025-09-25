@@ -1,32 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap');
+
 :root {
-    --primary-color: #DCD7C9;
-    --primary-light: #DCD7C9;    
-    --error-color: #774360;
-    --error-dark: #774360;
-    --text-color: #E0E0E0;
-    --text-light: #FFFFFF;
-    --background-color: #1E1E1E;
-    --card-background: #2D2D2D;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --modal-background: rgba(0, 0, 0, 0.7);
-    --input-background: #333333;
-    --input-border: #404040;
-    --button-gradient-start: #2C3333;
-    --button-gradient-end: #2C3333;
-    --error-gradient-start: #774360;
-    --error-gradient-end: #774360;
-    --btn-color: #395B64;
+  --dark-bg: #121212;
+  --light-bg: #1E1E1E;
+  --off-white: #fcfaf7;
+  --white: #ffffff;
+  --yellow: #F6E05E;
+  --green: #48BB78;
+  --pink: #ED64A6;
+  --light-blue: #63B3ED;
+  --transparent-white: rgba(255, 255, 255, 0.1);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Heebo', sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, #121212 0%, #1E1E1E 100%);
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--light-bg) 100%);
     min-height: 100vh;
     padding: 20px;
 }
@@ -34,85 +28,96 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: var(--background-color);
+    background-color: var(--light-bg);
     border-radius: 20px;
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 24px var(--transparent-white);
     padding: 30px;
 }
 
 header {
     margin-bottom: 40px;
-    
+    position: relative;
+    text-align: center;
 }
 
 h1 {
-    text-align: center;
-
-    color: var(--text-light);
+    color: var(--white);
     font-size: 2.5rem;
     margin-bottom: 10px;
     font-weight: 700; 
-    
-    float: center;
-    margin-right: 30px;
+    display: inline-block;
 }
 
 .logout-btn {
-    padding: 8px 8px;
-    font-size: 12px;
-    background-color: var(--error-gradient-start);
-    color: var(--text-light);
-    border: none;
-    border-radius: 5px;
-
+    background: none;
+    border: 1px solid var(--pink);
+    color: var(--pink);
+    border-radius: 16px;
+    padding: 0.4rem 0.8rem;
     cursor: pointer;
-    
-    float: left;
-
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-
-
-/* 
-h1 {
-    margin: 0;
-    color: var(--text-light);
-    font-size: 24px;
-    float: center;
-} */
+.logout-btn:hover {
+    background-color: var(--pink);
+    color: var(--dark-bg);
+}
 
 h2 {
-    color: var(--primary-light);
+    color: var(--white);
     margin-bottom: 20px;
     font-weight: 600;
 }
 
 /* Category Selection */
 .category-selection {
-    margin-bottom: 40px;
-    justify-content: center;
+    margin-bottom: 30px;
+    width: 100%;
 }
 
 .category-buttons {
-    gap: 20px;
+    display: flex;
     justify-content: center;
+    border-bottom: 1px solid var(--transparent-white);
 }
 
 .category-btn {
-    padding: 12px 30px;
+    padding: 15px 30px;
     font-size: 1.1rem;
+    font-weight: 500;
     border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-    color: var(--text-light);
+    background-color: transparent;
+    color: var(--off-white);
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 8px var(--shadow-color);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px; /* Align with parent border */
 }
 
 .category-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-color);
+    color: var(--white);
+}
+
+.category-btn.active {
+    color: var(--yellow);
+    border-bottom: 3px solid var(--yellow);
+}
+
+/* General Button Style */
+.btn {
+    background: none;
+    border: 1px solid;
+    border-radius: 16px;
+    padding: 12px 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: inherit;
 }
 
 /* Search and Add Section */
@@ -128,35 +133,33 @@ h2 {
     display: flex;
     gap: 10px;
     min-width: 300px;
-    
 }
 
 #search-input {
     flex: 1;
     padding: 12px 20px;
-    border: 2px solid var(--text-color);
+    border: 2px solid var(--transparent-white);
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    
+    background-color: var(--light-bg);
+    color: var(--off-white);
 }
 
 #search-input:focus {
-    border-color: var(--primary-color);
+    border-color: var(--yellow);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+    box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
 }
 
 .search-btn {
-    padding: 12px 12px;
+    background-color: var(--pink);
+    color: var(--dark-bg);
     border: none;
-    border-radius: 12px;
-    background: var(--error-color);
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.search-btn:hover {
+    filter: brightness(1.1);
 }
 
 .addScan-container {
@@ -168,21 +171,26 @@ h2 {
 
 .action-btn {
     flex: 1;
-
-    padding: 12px 25px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-color);
+#add-item-btn {
+    background-color: var(--light-blue);
+    color: var(--dark-bg);
+    border: none;
+}
+
+#add-item-btn:hover {
+    filter: brightness(1.1);
+}
+
+#scan-barcode-btn {
+    border-color: var(--off-white);
+    color: var(--off-white);
+}
+
+#scan-barcode-btn:hover {
+    background-color: var(--off-white);
+    color: var(--dark-bg);
 }
 
 /* Items List */
@@ -196,29 +204,41 @@ h2 {
     gap: 25px;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .item-card {
-    background-color: var(--card-background);
+    background-color: var(--light-bg);
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--transparent-white);
+    animation: fadeIn 0.5s ease-out forwards;
 }
 
 .item-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .item-card h3 {
-    color: var(--text-light);
+    color: var(--white);
     margin-bottom: 15px;
     font-size: 1.2rem;
     font-weight: 600;
 }
 
 .item-card p {
-    color: var(--text-color);
+    color: var(--off-white);
     margin-bottom: 8px;
     line-height: 1.5;
 }
@@ -231,26 +251,27 @@ h2 {
 
 .edit-btn, .delete-btn {
     padding: 8px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
     font-weight: 500;
 }
 
 .edit-btn {
-    background: var(--btn-color);
-    color: var(--text-light);
+    border-color: var(--yellow);
+    color: var(--yellow);
+}
+
+.edit-btn:hover {
+    background-color: var(--yellow);
+    color: var(--dark-bg);
 }
 
 .delete-btn {
-    background: linear-gradient(135deg, var(--error-gradient-start) 0%, var(--error-gradient-end) 100%);
-    color: var(--text-light);
+    border-color: var(--pink);
+    color: var(--pink);
 }
 
-.edit-btn:hover, .delete-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+.delete-btn:hover {
+    background-color: var(--pink);
+    color: var(--white);
 }
 
 /* Modal */
@@ -261,19 +282,24 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--background-color);
+    background-color: rgba(18, 18, 18, 0.5);
     z-index: 1000;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow-y: auto;
+    padding: 20px 0;
 }
 
 .modal-content {
-    background-color: var(--card-background);
+    background-color: var(--light-bg);
     margin: 20px auto;
     padding: 30px;
     border-radius: 16px;
     max-width: 500px;
     position: relative;
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .close-btn {
@@ -282,12 +308,12 @@ h2 {
     left: 15px;
     font-size: 24px;
     cursor: pointer;
-    color: var(--primary-light);
+    color: var(--white);
     transition: color 0.3s ease;
 }
 
 .close-btn:hover {
-    color: var(--primary-color);
+    color: var(--yellow);
 }
 
 .form-group {
@@ -297,28 +323,51 @@ h2 {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: var(--primary-color);
+    color: var(--yellow);
     font-weight: 500;
+}
+
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group-inline input {
+    flex-grow: 1;
 }
 
 .form-group input,
 .form-group textarea,
+.form-group select,
 #auth-modal input {
     width: 100%;
     padding: 12px;
-    border: 2px solid var(--input-border);
+    border: 2px solid var(--transparent-white);
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background-color: var(--input-background);
-    color: var(--text-color);
+    background-color: var(--light-bg);
+    color: var(--off-white);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23fcfaf7' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 1rem center;
+    background-size: 1em;
+    padding-right: 12px; /* Reset padding to default */
+    padding-left: 2.5rem; /* Add padding to the left to avoid text overlapping the arrow */
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
-    border-color: var(--primary-color);
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--yellow);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+    box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
 }
 
 .form-group textarea {
@@ -329,22 +378,16 @@ h2 {
 #save-item-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-    color: var(--text-light);
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
     font-size: 1.1rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
     margin-top: 20px;
+    border-color: var(--off-white);
+    color: var(--off-white);
 }
 
 #save-item-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px var(--shadow-color);
+    background-color: var(--off-white);
+    color: var(--dark-bg);
 }
-
 
 /* Barcode Scanner */
 #scanner-container {
@@ -353,7 +396,7 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--modal-background);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 2000;
     display: flex;
     flex-direction: column;
@@ -363,19 +406,38 @@ h2 {
 }
 
 .viewport {
-    width: 100%;
+    width: 90vw;
     max-width: 640px;
-    height: 480px;
     background-color: #000;
     border-radius: 16px;
     overflow: hidden;
+    position: relative;
+    aspect-ratio: 4 / 3;
+}
+
+.viewport::after {
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    right: 10%;
+    bottom: 25%;
+    border: 2px solid var(--pink);
+    box-shadow: 0 0 15px var(--pink), inset 0 0 15px var(--pink);
+    border-radius: 8px;
+}
+
+.viewport > video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 #stop-scan-btn {
     margin-top: 20px;
     padding: 12px 25px;
-    background: var(--btn-color);
-    color: var(--text-light);
+    background: var(--light-blue);
+    color: var(--white);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -385,15 +447,15 @@ h2 {
 
 #stop-scan-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Scan Barcode Button in Form */
 .scan-barcode-btn {
     margin-top: 8px;
     padding: 8px 16px;
-    background: var(--btn-color);
-    color: var(--text-light);
+    background: var(--light-blue);
+    color: var(--white);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -403,7 +465,7 @@ h2 {
 
 .scan-barcode-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Authentication Modal */
@@ -416,16 +478,16 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--background-color);
+    background-color: var(--dark-bg);
     z-index: 1000;
     backdrop-filter: blur(5px);
 }
 
 #auth-modal .modal-content {
-    background-color: var(--card-background);
+    background-color: var(--light-bg);
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 8px 16px var(--shadow-color);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     width: 100%;
     max-width: 400px;
 }
@@ -437,22 +499,22 @@ h2 {
 #auth-modal label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--primary-color);
+    color: var(--yellow);
     font-weight: 500;
 }
 
 #auth-modal input:focus {
-    border-color: var(--primary-color);
+    border-color: var(--yellow);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(50, 142, 110, 0.1);
+    box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
 }
 
 #auth-modal button {
     width: 100%;
     padding: 0.75rem;
     margin-top: 1rem;
-    background: var(--btn-color);
-    color: var(--text-light);
+    background: var(--light-blue);
+    color: var(--white);
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -462,36 +524,12 @@ h2 {
 
 #auth-modal button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 #auth-modal #register-btn {
-    background: var(--btn-color);
+    background: var(--green);
 }
-
-/* Logout Button */
-/* .logout-btn {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(50, 142, 110, 0.2);
-} */
-
-
-
-
 
 /* Hidden Class */
 .hidden {
@@ -501,19 +539,68 @@ h2 {
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: 20px;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
     }
 
     .category-buttons {
-        flex-direction: column;
+        flex-direction: row;
+        overflow-x: auto;
     }
 
     .search-add-section {
         flex-direction: column;
     }
 
+    #items-container {
+        grid-template-columns: 1fr;
+    }
+
     .modal-content {
-        margin: 20px;
+        margin: 10px;
+        padding: 20px;
         width: auto;
     }
-} 
+}
+
+/* Splash Screen */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-bg, #121212);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-logo {
+    width: 150px;
+    height: 150px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
