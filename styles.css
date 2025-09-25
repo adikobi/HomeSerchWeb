@@ -119,9 +119,9 @@ h2 {
 .header-dropdown .more-btn {
     background: transparent;
     border: none;
-    width: 40px;
-    height: 40px;
-    padding: 0;
+    width: 30px; /* Reduced from 40px */
+    height: 30px; /* Reduced from 40px */
+    padding: 5px; /* Add some padding to make it easier to click */
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -132,10 +132,10 @@ h2 {
 
 .more-btn span {
     display: block;
-    width: 24px;
-    height: 3px;
+    width: 18px; /* Reduced from 24px */
+    height: 2px; /* Reduced from 3px */
     background-color: var(--off-white);
-    border-radius: 3px;
+    border-radius: 2px;
     transition: all 0.3s ease;
 }
 
