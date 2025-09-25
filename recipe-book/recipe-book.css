@@ -18,8 +18,10 @@
     box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
 }
 
-/* Back button styling - matched to main app's logout button */
+/* Back button styling */
 .back-btn {
+    display: inline-block;
+    margin-bottom: 20px; /* Space between button and header */
     background: none;
     border: 1px solid var(--pink);
     color: var(--pink);
@@ -28,20 +30,12 @@
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
-    position: absolute;
-    left: 30px; /* Adjusted for container padding */
-    top: 40px;
     text-decoration: none;
 }
 
 .back-btn:hover {
     background-color: var(--pink);
     color: var(--dark-bg);
-}
-
-/* Ensure the main container has some padding */
-.container {
-    padding-top: 60px; /* Make space for the back button */
 }
 
 /* Style for recipe content preview */
@@ -55,8 +49,12 @@
 /* New grid layout for recipes */
 #recipes-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
-    gap: 25px;
+    /* This creates a flexible grid. It will show as many columns as fit,
+       with each column being at least 140px wide but stretching to fill space.
+       On most phones, this will result in 2 columns, but on very narrow
+       screens, it will gracefully become a single column. */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px; /* Slightly reduced gap for smaller screens */
 }
 
 /* Adjustments for item cards within the grid */
@@ -69,6 +67,7 @@
 
 .item-card h3 {
     margin-bottom: 20px; /* Add more space below title */
+    word-wrap: break-word; /* Ensure long titles wrap and don't break layout */
 }
 
 /* Modal specific styles */
@@ -96,17 +95,6 @@
 .close-recipe-modal-btn:focus {
     color: black;
     text-decoration: none;
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 768px) {
-    #recipes-container {
-        grid-template-columns: 1fr; /* Single column on smaller screens */
-    }
-
-    .item-card h3 {
-        word-wrap: break-word; /* Ensure long titles wrap */
-    }
 }
 
 /* Styling for Add Recipe button to match main app */
