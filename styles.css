@@ -313,6 +313,7 @@ h2 {
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    justify-content: center; /* Center the action buttons */
 }
 
 .edit-btn, .delete-btn {

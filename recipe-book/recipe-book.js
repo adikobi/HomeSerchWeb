@@ -98,6 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
         viewRecipeContent.innerHTML = linkify(recipe.content);
         recipeViewModal.classList.remove('hidden');
         recipeViewModal.style.display = 'block';
+
+        // Scroll to the top of the modal content
+        const modalContent = recipeViewModal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.scrollTop = 0;
+        }
     };
 
     const hideViewModal = () => {
