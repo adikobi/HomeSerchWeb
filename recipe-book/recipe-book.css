@@ -97,6 +97,15 @@
     text-decoration: none;
 }
 
+/* Styling for auto-generated links in recipe content */
+#view-recipe-content a {
+    color: var(--light-blue);
+    text-decoration: underline;
+    /* Ensure long links wrap and don't break the layout */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
 /* Styling for Add Recipe button to match main app */
 #add-recipe-btn {
     background-color: var(--light-blue);

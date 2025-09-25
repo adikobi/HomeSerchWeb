@@ -4,6 +4,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 import { recipeFirestore } from './firebase-recipes.js';
 
+// Helper function to find and replace URLs with clickable links
+function linkify(text) {
+    if (!text) return '';
+    const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])|(\bwww\.[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(urlRegex, function(url) {
+        const fullUrl = url.startsWith('www.') ? 'http://' + url : url;
+        return `<a href="${fullUrl}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const addRecipeBtn = document.getElementById('add-recipe-btn');
@@ -84,7 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Modal Handling (View) ---
     const showViewModal = (recipe) => {
         viewRecipeTitle.textContent = recipe.title;
-        viewRecipeContent.textContent = recipe.content;
+        // Use linkify to convert URLs in the content to clickable links
+        viewRecipeContent.innerHTML = linkify(recipe.content);
         recipeViewModal.classList.remove('hidden');
         recipeViewModal.style.display = 'block';
     };
