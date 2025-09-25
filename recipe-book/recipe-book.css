@@ -77,7 +77,8 @@
 }
 
 #recipe-modal textarea {
-    min-height: 200px;
+    min-height: 300px; /* Increased minimum height for more space */
+    max-height: 60vh; /* Set a max height relative to viewport height */
     resize: vertical;
 }
 
@@ -95,6 +96,17 @@
 .close-recipe-modal-btn:focus {
     color: black;
     text-decoration: none;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    #recipes-container {
+        grid-template-columns: 1fr; /* Single column on smaller screens */
+    }
+
+    .item-card h3 {
+        word-wrap: break-word; /* Ensure long titles wrap */
+    }
 }
 
 /* Styling for Add Recipe button to match main app */
