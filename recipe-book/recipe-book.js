@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const recipesContainer = document.getElementById('recipes-container');
     const recipeSearchInput = document.getElementById('recipe-search-input');
     const recipeModalTitle = document.getElementById('recipe-modal-title');
+    // New elements for the view modal
+    const recipeViewModal = document.getElementById('recipe-view-modal');
+    const closeViewModalBtn = document.querySelector('.close-view-modal-btn');
+    const viewRecipeTitle = document.getElementById('view-recipe-title');
+    const viewRecipeContent = document.getElementById('view-recipe-content');
+
 
     let currentRecipes = [];
     let editingRecipeId = null;
@@ -43,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recipes.forEach(recipe => {
             const recipeCard = document.createElement('div');
             recipeCard.className = 'item-card'; // Reusing style from main app
+            recipeCard.dataset.id = recipe.id; // Add data-id to the card itself
             recipeCard.innerHTML = `
                 <h3>${recipe.title}</h3>
                 <p class="recipe-content-preview">${recipe.content.substring(0, 100)}...</p>
@@ -55,24 +62,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // --- Modal Handling ---
+    // --- Modal Handling (Add/Edit) ---
     const showModal = (isEditing = false, recipe = {}) => {
         editingRecipeId = isEditing ? recipe.id : null;
         recipeModalTitle.textContent = isEditing ? 'ערוך מתכון' : 'הוסף מתכון חדש';
         document.getElementById('recipe-title').value = isEditing ? recipe.title : '';
         document.getElementById('recipe-content').value = isEditing ? recipe.content : '';
         recipeModal.classList.remove('hidden');
+        recipeModal.style.display = 'block';
     };
 
     const hideModal = () => {
         recipeModal.classList.add('hidden');
+        recipeModal.style.display = 'none';
         recipeForm.reset();
         editingRecipeId = null;
+    };
+
+    // --- Modal Handling (View) ---
+    const showViewModal = (recipe) => {
+        viewRecipeTitle.textContent = recipe.title;
+        viewRecipeContent.textContent = recipe.content;
+        recipeViewModal.classList.remove('hidden');
+        recipeViewModal.style.display = 'block';
+    };
+
+    const hideViewModal = () => {
+        recipeViewModal.classList.add('hidden');
+        recipeViewModal.style.display = 'none';
     };
 
     // --- Event Listeners ---
     addRecipeBtn.addEventListener('click', () => showModal(false));
     closeRecipeModalBtn.addEventListener('click', hideModal);
+    closeViewModalBtn.addEventListener('click', hideViewModal);
+
 
     // Save or Update Recipe
     recipeForm.addEventListener('submit', async (e) => {
@@ -101,29 +125,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Handle Edit and Delete button clicks
+    // Handle clicks within the recipes container
     recipesContainer.addEventListener('click', async (e) => {
         const target = e.target;
-        const recipeId = target.dataset.id;
 
-        if (!recipeId) return;
+        // Case 1: Clicked on Edit or Delete button
+        const button = target.closest('.item-actions button');
+        if (button) {
+            const recipeId = button.dataset.id;
+            if (!recipeId) return;
 
-        if (target.classList.contains('edit-btn')) {
-            const recipe = currentRecipes.find(r => r.id === recipeId);
-            if (recipe) {
-                showModal(true, recipe);
+            if (button.classList.contains('edit-btn')) {
+                const recipe = currentRecipes.find(r => r.id === recipeId);
+                if (recipe) {
+                    showModal(true, recipe);
+                }
+            } else if (button.classList.contains('delete-btn')) {
+                if (confirm('האם אתה בטוח שברצונך למחוק את המתכון?')) {
+                    try {
+                        const recipeDocRef = doc(recipeFirestore, "notes", USER_ID, "myNotes", recipeId);
+                        await deleteDoc(recipeDocRef);
+                    } catch (error) {
+                        console.error("Error deleting recipe: ", error);
+                        alert("שגיאה במחיקת המתכון.");
+                    }
+                }
             }
+            return; // Stop processing further
         }
 
-        if (target.classList.contains('delete-btn')) {
-            if (confirm('האם אתה בטוח שברצונך למחוק את המתכון?')) {
-                try {
-                    const recipeDocRef = doc(recipeFirestore, "notes", USER_ID, "myNotes", recipeId);
-                    await deleteDoc(recipeDocRef);
-                } catch (error) {
-                    console.error("Error deleting recipe: ", error);
-                    alert("שגיאה במחיקת המתכון.");
-                }
+        // Case 2: Clicked on the card itself to view
+        const card = target.closest('.item-card');
+        if (card) {
+            const recipeId = card.dataset.id;
+            const recipe = currentRecipes.find(r => r.id === recipeId);
+            if (recipe) {
+                showViewModal(recipe);
             }
         }
     });

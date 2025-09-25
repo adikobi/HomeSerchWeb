@@ -1,5 +1,23 @@
 /* Basic styling for the recipe book page */
 
+/* Make search input larger and more mobile-friendly */
+#recipe-search-input {
+    flex: 1;
+    padding: 14px 20px; /* Increased padding */
+    font-size: 1.1rem; /* Increased font size */
+    border: 2px solid var(--transparent-white);
+    border-radius: 12px;
+    background-color: var(--light-bg);
+    color: var(--off-white);
+    transition: all 0.3s ease;
+}
+
+#recipe-search-input:focus {
+    border-color: var(--yellow);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(246, 224, 94, 0.1);
+}
+
 /* Back button styling */
 .back-btn {
     position: absolute;
@@ -53,6 +71,35 @@
 
 .close-recipe-modal-btn:hover,
 .close-recipe-modal-btn:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* View Recipe Modal Styles */
+#view-recipe-title {
+    margin-bottom: 20px;
+    color: var(--yellow);
+}
+
+#view-recipe-content {
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    line-height: 1.8;
+    color: var(--off-white);
+    font-size: 1.1rem;
+}
+
+.close-view-modal-btn {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.close-view-modal-btn:hover,
+.close-view-modal-btn:focus {
     color: black;
     text-decoration: none;
 }
