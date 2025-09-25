@@ -1,6 +1,6 @@
 // Import Firestore functions from the full URL and the recipe-specific Firestore instance
 import {
-    collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc
+    collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 import { recipeFirestore } from './firebase-recipes.js';
 
@@ -24,13 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let editingRecipeId = null;
 
     // --- Firestore Logic ---
-    // NOTE: Using a hardcoded user ID for now.
     const USER_ID = "FgETS4BeELaIGQ3QziwnDCqDQUx2";
     const notesCollectionRef = collection(recipeFirestore, "notes", USER_ID, "myNotes");
+    // Create a query to order recipes by title
+    const recipesQuery = query(notesCollectionRef, orderBy("title"));
+
 
     // Function to load recipes and listen for real-time updates
     const loadRecipes = () => {
-        onSnapshot(notesCollectionRef, (snapshot) => {
+        // Use the sorted query instead of the direct collection reference
+        onSnapshot(recipesQuery, (snapshot) => {
             currentRecipes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             displayRecipes(currentRecipes);
         }, (error) => {
@@ -52,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             recipeCard.dataset.id = recipe.id; // Add data-id to the card itself
             recipeCard.innerHTML = `
                 <h3>${recipe.title}</h3>
-                <p class="recipe-content-preview">${recipe.content.substring(0, 100)}...</p>
                 <div class="item-actions">
                     <button class="btn edit-btn" data-id="${recipe.id}">ערוך</button>
                     <button class="btn delete-btn" data-id="${recipe.id}">מחק</button>
@@ -129,33 +131,33 @@ document.addEventListener('DOMContentLoaded', () => {
     recipesContainer.addEventListener('click', async (e) => {
         const target = e.target;
 
-        // Case 1: Clicked on Edit or Delete button
-        const button = target.closest('.item-actions button');
-        if (button) {
-            const recipeId = button.dataset.id;
-            if (!recipeId) return;
+        const editButton = target.closest('.edit-btn');
+        const deleteButton = target.closest('.delete-btn');
+        const card = target.closest('.item-card');
 
-            if (button.classList.contains('edit-btn')) {
-                const recipe = currentRecipes.find(r => r.id === recipeId);
-                if (recipe) {
-                    showModal(true, recipe);
-                }
-            } else if (button.classList.contains('delete-btn')) {
-                if (confirm('האם אתה בטוח שברצונך למחוק את המתכון?')) {
-                    try {
-                        const recipeDocRef = doc(recipeFirestore, "notes", USER_ID, "myNotes", recipeId);
-                        await deleteDoc(recipeDocRef);
-                    } catch (error) {
-                        console.error("Error deleting recipe: ", error);
-                        alert("שגיאה במחיקת המתכון.");
-                    }
-                }
+        if (editButton) {
+            const recipeId = editButton.dataset.id;
+            const recipe = currentRecipes.find(r => r.id === recipeId);
+            if (recipe) {
+                showModal(true, recipe);
             }
-            return; // Stop processing further
+            return;
         }
 
-        // Case 2: Clicked on the card itself to view
-        const card = target.closest('.item-card');
+        if (deleteButton) {
+            const recipeId = deleteButton.dataset.id;
+            if (confirm('האם אתה בטוח שברצונך למחוק את המתכון?')) {
+                try {
+                    const recipeDocRef = doc(recipeFirestore, "notes", USER_ID, "myNotes", recipeId);
+                    await deleteDoc(recipeDocRef);
+                } catch (error) {
+                    console.error("Error deleting recipe: ", error);
+                    alert("שגיאה במחיקת המתכון.");
+                }
+            }
+            return;
+        }
+
         if (card) {
             const recipeId = card.dataset.id;
             const recipe = currentRecipes.find(r => r.id === recipeId);
@@ -168,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Live Search
     recipeSearchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
+        // The search now filters the already sorted list
         const filteredRecipes = currentRecipes.filter(recipe =>
             recipe.title.toLowerCase().includes(searchTerm) ||
             recipe.content.toLowerCase().includes(searchTerm)
