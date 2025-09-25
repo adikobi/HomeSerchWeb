@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Firestore Logic ---
     // NOTE: Using a hardcoded user ID for now.
-    const USER_ID = "FgETS4BeELaIGQ3oZziwnDcQDQUx2";
+    const USER_ID = "FgETS4BeELaIGQ3QziwnDCqDQUx2";
     const notesCollectionRef = collection(recipeFirestore, "notes", USER_ID, "myNotes");
 
     // Function to load recipes and listen for real-time updates
