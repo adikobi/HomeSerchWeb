@@ -1,3 +1,9 @@
+// !!! SECURITY WARNING !!!
+// It is NOT recommended to store API keys directly in client-side code.
+// In a production environment, these keys should be stored securely,
+// for example, as environment variables on a server or using a secrets management service.
+// This is included here only for demonstration purposes in this sandboxed environment.
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";

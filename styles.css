@@ -108,15 +108,41 @@ h2 {
     border-bottom: 3px solid var(--yellow);
 }
 
-/* Dropdown Menu Styles */
-.dropdown {
-    position: relative;
-    display: inline-block;
+/* Dropdown Menu Styles in Header */
+.header-dropdown {
+    position: absolute;
+    top: 50%;
+    right: 30px; /* Aligned with container padding */
+    transform: translateY(-50%);
+}
+
+.header-dropdown .more-btn {
+    background: none;
+    border: 1px solid var(--off-white);
+    color: var(--off-white);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.more-btn:hover {
+    background-color: var(--off-white);
+    color: var(--dark-bg);
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
+    right: 0;
+    top: 50px; /* Position below the button */
     background-color: var(--light-bg);
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);

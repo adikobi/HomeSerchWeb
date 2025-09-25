@@ -4,8 +4,22 @@ document.addEventListener('DOMContentLoaded', () => {
         splashScreen.classList.add('hidden');
     }, 2000); // 2 second delay
 
-    // Set initial active category
-    document.getElementById('books-btn').classList.add('active');
+    // Handle active category state from URL parameter or set default
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeParam = urlParams.get('active');
+
+    const allCategoryButtons = document.querySelectorAll('.category-buttons .category-btn');
+    allCategoryButtons.forEach(btn => btn.classList.remove('active'));
+
+    if (activeParam === 'recipes') {
+        document.getElementById('recipes-btn').classList.add('active');
+        currentCategory = null; // This is a link, not a data category
+        document.getElementById('items-container').innerHTML = '';
+    } else {
+        // Default to 'books'
+        document.getElementById('books-btn').classList.add('active');
+        currentCategory = 'books'; // Explicitly set default
+    }
 });
 
 // Global variables
@@ -22,8 +36,8 @@ const registerBtn = document.getElementById('register-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const booksBtn = document.getElementById('books-btn');
 const foodBtn = document.getElementById('food-btn');
-const itemsBtn = document.getElementById('items-btn');
 const recipesBtn = document.getElementById('recipes-btn');
+const itemsBtn = document.getElementById('items-btn'); // This should be here for the dropdown
 const moreBtn = document.getElementById('more-btn');
 const dropdownContent = document.getElementById('dropdown-content');
 const searchInput = document.getElementById('search-input');
@@ -133,30 +147,23 @@ if (stopScanBtn) {
 function selectCategory(category) {
     currentCategory = category;
 
-    // Update active button state for all category buttons
-    const buttons = document.querySelectorAll('.category-buttons .category-btn');
-    buttons.forEach(btn => {
-        // We only want to manage active state for the main category buttons
-        if (['books-btn', 'food-btn', 'items-btn'].includes(btn.id)) {
-            btn.classList.remove('active');
-        }
+    // Deactivate all potential category buttons
+    [booksBtn, foodBtn, itemsBtn, recipesBtn].forEach(btn => {
+        if (btn) btn.classList.remove('active');
     });
 
-    // Add active class to the selected category button
+    // Activate the selected button
     const selectedBtn = document.getElementById(`${category}-btn`);
     if (selectedBtn) {
         selectedBtn.classList.add('active');
     }
 
-    // If 'items' is selected, also keep the 'more' button visually inactive
+    // If 'items' is selected from dropdown, close it
     if (category === 'items') {
-        moreBtn.classList.remove('active');
-        // Ensure the dropdown closes after selection
         if (dropdownContent.classList.contains('show')) {
             dropdownContent.classList.remove('show');
         }
     }
-
 
     authorGroup.style.display = category === 'books' ? 'block' : 'none';
     loadItems();
