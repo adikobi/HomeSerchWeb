@@ -117,25 +117,30 @@ h2 {
 }
 
 .header-dropdown .more-btn {
-    background: none;
-    border: 1px solid var(--off-white);
-    color: var(--off-white);
-    border-radius: 50%;
+    background: transparent;
+    border: none;
     width: 40px;
     height: 40px;
     padding: 0;
-    font-size: 1.2rem;
-    line-height: 1;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
-    justify-content: center;
 }
 
-.more-btn:hover {
+.more-btn span {
+    display: block;
+    width: 24px;
+    height: 3px;
     background-color: var(--off-white);
-    color: var(--dark-bg);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.more-btn:hover span {
+    background-color: var(--yellow);
 }
 
 .dropdown-content {
