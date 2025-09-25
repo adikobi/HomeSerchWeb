@@ -108,6 +108,72 @@ h2 {
     border-bottom: 3px solid var(--yellow);
 }
 
+/* Dropdown Menu Styles in Header */
+.header-dropdown {
+    position: absolute;
+    top: 50%;
+    right: 30px; /* Aligned with container padding */
+    transform: translateY(-50%);
+}
+
+.header-dropdown .more-btn {
+    background: transparent;
+    border: none;
+    width: 30px; /* Reduced from 40px */
+    height: 30px; /* Reduced from 40px */
+    padding: 5px; /* Add some padding to make it easier to click */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.more-btn span {
+    display: block;
+    width: 18px; /* Reduced from 24px */
+    height: 2px; /* Reduced from 3px */
+    background-color: var(--off-white);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.more-btn:hover span {
+    background-color: var(--yellow);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px; /* Position below the button */
+    background-color: var(--light-bg);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--transparent-white);
+}
+
+.dropdown-item {
+    width: 100%;
+    text-align: right;
+    padding: 12px 16px;
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.dropdown-item:hover {
+    background-color: var(--dark-bg);
+}
+
+/* Class to show the dropdown */
+.show {
+    display: block;
+}
+
 /* General Button Style */
 .btn {
     background: none;
@@ -247,6 +313,7 @@ h2 {
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    justify-content: center; /* Center the action buttons */
 }
 
 .edit-btn, .delete-btn {

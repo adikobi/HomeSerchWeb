@@ -4,8 +4,22 @@ document.addEventListener('DOMContentLoaded', () => {
         splashScreen.classList.add('hidden');
     }, 2000); // 2 second delay
 
-    // Set initial active category
-    document.getElementById('books-btn').classList.add('active');
+    // Handle active category state from URL parameter or set default
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeParam = urlParams.get('active');
+
+    const allCategoryButtons = document.querySelectorAll('.category-buttons .category-btn');
+    allCategoryButtons.forEach(btn => btn.classList.remove('active'));
+
+    if (activeParam === 'recipes') {
+        document.getElementById('recipes-btn').classList.add('active');
+        currentCategory = null; // This is a link, not a data category
+        document.getElementById('items-container').innerHTML = '';
+    } else {
+        // Default to 'books'
+        document.getElementById('books-btn').classList.add('active');
+        currentCategory = 'books'; // Explicitly set default
+    }
 });
 
 // Global variables
@@ -22,7 +36,10 @@ const registerBtn = document.getElementById('register-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const booksBtn = document.getElementById('books-btn');
 const foodBtn = document.getElementById('food-btn');
-const itemsBtn = document.getElementById('items-btn');
+const recipesBtn = document.getElementById('recipes-btn');
+const itemsBtn = document.getElementById('items-btn'); // This should be here for the dropdown
+const moreBtn = document.getElementById('more-btn');
+const dropdownContent = document.getElementById('dropdown-content');
 const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-btn');
 const addItemBtn = document.getElementById('add-item-btn');
@@ -98,6 +115,25 @@ searchInput.addEventListener('input', () => {
 booksBtn.addEventListener('click', () => selectCategory('books'));
 foodBtn.addEventListener('click', () => selectCategory('food'));
 itemsBtn.addEventListener('click', () => selectCategory('items'));
+recipesBtn.addEventListener('click', () => {
+    window.location.href = 'recipe-book/recipe-book.html';
+});
+
+// Dropdown logic
+moreBtn.addEventListener('click', (event) => {
+    event.stopPropagation(); // Prevents the window click event from firing immediately
+    dropdownContent.classList.toggle('show');
+});
+
+// Close the dropdown if the user clicks outside of it
+window.addEventListener('click', (event) => {
+    if (!event.target.matches('#more-btn')) {
+        if (dropdownContent.classList.contains('show')) {
+            dropdownContent.classList.remove('show');
+        }
+    }
+});
+
 searchBtn.addEventListener('click', searchItems);
 addItemBtn.addEventListener('click', showAddItemModal);
 scanBarcodeBtn.addEventListener('click', startBarcodeScanner);
@@ -111,10 +147,23 @@ if (stopScanBtn) {
 function selectCategory(category) {
     currentCategory = category;
 
-    // Update active button
-    const buttons = document.querySelectorAll('.category-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`${category}-btn`).classList.add('active');
+    // Deactivate all potential category buttons
+    [booksBtn, foodBtn, itemsBtn, recipesBtn].forEach(btn => {
+        if (btn) btn.classList.remove('active');
+    });
+
+    // Activate the selected button
+    const selectedBtn = document.getElementById(`${category}-btn`);
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+    }
+
+    // If 'items' is selected from dropdown, close it
+    if (category === 'items') {
+        if (dropdownContent.classList.contains('show')) {
+            dropdownContent.classList.remove('show');
+        }
+    }
 
     authorGroup.style.display = category === 'books' ? 'block' : 'none';
     loadItems();

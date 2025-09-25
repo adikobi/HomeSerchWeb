@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ספר מתכונים</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="recipe-book.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html?active=recipes" class="back-btn">חזרה</a>
+        <header>
+            <h1>ספר מתכונים</h1>
+        </header>
+
+        <div class="main-content">
+            <!-- Search and Add Section -->
+            <div class="search-add-section">
+                <div class="search-container">
+                    <input type="text" id="recipe-search-input" placeholder="חיפוש מתכונים...">
+                </div>
+                <div class="addScan-container">
+                    <button id="add-recipe-btn" class="btn action-btn">הוסף מתכון חדש</button>
+                </div>
+            </div>
+
+            <!-- Recipes List -->
+            <div class="items-list">
+                <div id="recipes-container"></div>
+            </div>
+        </div>
+
+        <!-- Add/Edit Recipe Modal -->
+        <div id="recipe-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-recipe-modal-btn">&times;</span>
+                <h2 id="recipe-modal-title">הוסף מתכון חדש</h2>
+                <form id="recipe-form">
+                    <div class="form-group">
+                        <label for="recipe-title">כותרת:</label>
+                        <input type="text" id="recipe-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipe-content">תוכן המתכון:</label>
+                        <textarea id="recipe-content" rows="10" required></textarea>
+                    </div>
+                    <button type="submit" id="save-recipe-btn" class="btn">שמור</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Recipe Modal -->
+        <div id="recipe-view-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-view-modal-btn">&times;</span>
+                <h2 id="view-recipe-title"></h2>
+                <div id="view-recipe-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js" type="module"></script>
+
+    <!-- Recipe Book Scripts -->
+    <script src="firebase-recipes.js" type="module"></script>
+    <script src="recipe-book.js" type="module"></script>
+</body>
+</html>
