@@ -353,27 +353,24 @@ function saveItem(e) {
     }
 
     if (editingItemId) {
-        // Update existing item
+        // Update existing item - original logic, does not add itemId
         const itemRef = database.ref(`${currentCategory}/${editingItemId}`);
-        itemRef.once('value', (snapshot) => {
-            if (snapshot.exists()) {
-                itemRef.update(itemData)
-                    .then(() => {
-                        console.log('Item updated successfully');
-                        hideModal();
-                    })
-                    .catch(error => {
-                        console.error('Error updating item:', error);
-                        alert('שגיאה בעדכון הפריט. אנא נסה שוב.');
-                    });
-            } else {
-                alert('הפריט לא נמצא במערכת. ייתכן שנמחק.');
+        itemRef.update(itemData)
+            .then(() => {
+                console.log('Item updated successfully');
                 hideModal();
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Error updating item:', error);
+                alert('שגיאה בעדכון הפריט. אנא נסה שוב.');
+            });
     } else {
         // Add new item
-        database.ref(selectedCategory).push(itemData)
+        const newItemRef = database.ref(selectedCategory).push();
+        const itemId = newItemRef.key;
+        itemData.itemId = itemId; // Add the generated key as itemId
+
+        newItemRef.set(itemData)
             .then(() => {
                 console.log('Item added successfully');
                 hideModal();
