@@ -54,6 +54,7 @@
                 <div id="dropdown-content" class="dropdown-content">
                     <button id="items-btn" class="dropdown-item category-btn">פריטים</button>
                     <button id="export-btn" class="dropdown-item">ייצוא</button>
+                    <button id="import-btn" class="dropdown-item">ייבוא</button>
                 </div>
             </div>
         </header>
@@ -151,6 +152,41 @@
                     </div>
                     <button type="submit" class="btn">ייצא ל-Excel</button>
                 </form>
+            </div>
+        </div>
+
+        <!-- Import Modal -->
+        <div id="import-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-import-modal-btn">&times;</span>
+                <h2>ייבוא נתונים מאקסל</h2>
+                <div class="import-instructions">
+                    <p><strong>הוראות:</strong></p>
+                    <p>יש לוודא שהקובץ בפורמט Excel (.xlsx, .xls) והעמודות בו הן לפי הסדר הבא:</p>
+                    <ul>
+                        <li><strong>description:</strong> שם/תיאור הפריט (שדה חובה)</li>
+                        <li><strong>location:</strong> מיקום</li>
+                        <li><strong>notes:</strong> הערות</li>
+                        <li><strong>barcode:</strong> ברקוד</li>
+                        <li><strong>author:</strong> סופר (רלוונטי רק לקטגוריית "ספרים")</li>
+                    </ul>
+                </div>
+                <form id="import-form">
+                    <div class="form-group">
+                        <label for="import-file">בחר קובץ:</label>
+                        <input type="file" id="import-file" accept=".xlsx, .xls" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="import-category">בחר קטגוריה לייבוא:</label>
+                        <select id="import-category" required>
+                            <option value="books">ספרים</option>
+                            <option value="food">מזון</option>
+                            <option value="items">פריטים</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">התחל ייבוא</button>
+                </form>
+                <div id="import-results" class="import-results"></div>
             </div>
         </div>
     </div>

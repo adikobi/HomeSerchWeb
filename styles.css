@@ -720,3 +720,107 @@ h2 {
     background-color: var(--light-blue); /* Add hover effect */
     color: var(--dark-bg);
 }
+
+/* Import Button Style */
+#import-btn {
+    color: var(--green);
+    font-weight: 600;
+    position: relative;
+    padding-right: 35px; /* Space for the icon */
+}
+
+#import-btn::after {
+    content: '↑'; /* Up arrow icon for import */
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+/* Import Modal Specific Styles */
+.close-import-modal-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--white);
+    transition: color 0.3s ease;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close-import-modal-btn:hover {
+    color: var(--yellow);
+}
+
+.import-instructions {
+    background-color: var(--dark-bg);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid var(--transparent-white);
+}
+
+.import-instructions p {
+    margin-bottom: 10px;
+    color: var(--off-white);
+}
+
+.import-instructions ul {
+    list-style-position: inside;
+    padding-right: 10px;
+    color: var(--off-white);
+}
+
+.import-instructions li {
+    margin-bottom: 5px;
+}
+
+#import-form input[type="file"] {
+    color: var(--off-white);
+    background-color: var(--dark-bg);
+    border: 1px solid var(--transparent-white);
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+#import-form .btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    border-color: var(--green);
+    color: var(--green);
+}
+
+#import-form .btn:hover {
+    background-color: var(--green);
+    color: var(--dark-bg);
+}
+
+.import-results {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--dark-bg);
+    border-radius: 8px;
+    border: 1px solid var(--transparent-white);
+    color: var(--off-white);
+}
+
+.import-results p {
+    margin-bottom: 10px;
+}
+
+.import-results ul {
+    list-style-position: inside;
+    padding-right: 10px;
+}
+
+.import-results .error {
+    color: var(--pink);
+    font-weight: bold;
+}

@@ -55,6 +55,11 @@ const exportBtn = document.getElementById('export-btn');
 const exportModal = document.getElementById('export-modal');
 const closeExportModalBtn = document.querySelector('.close-export-modal-btn');
 const exportForm = document.getElementById('export-form');
+const importBtn = document.getElementById('import-btn');
+const importModal = document.getElementById('import-modal');
+const closeImportModalBtn = document.querySelector('.close-import-modal-btn');
+const importForm = document.getElementById('import-form');
+const importResults = document.getElementById('import-results');
 
 // Authentication State Observer
 auth.onAuthStateChanged(user => {
@@ -136,6 +141,26 @@ exportForm.addEventListener('submit', (e) => {
     exportDataToExcel(category);
     exportModal.classList.add('hidden');
     exportModal.style.display = 'none';
+});
+importBtn.addEventListener('click', () => {
+    importModal.classList.remove('hidden');
+    importModal.style.display = 'block';
+    importResults.innerHTML = ''; // Clear previous results
+});
+closeImportModalBtn.addEventListener('click', () => {
+    importModal.classList.add('hidden');
+    importModal.style.display = 'none';
+});
+importForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('import-file');
+    const category = document.getElementById('import-category').value;
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        importDataFromExcel(file, category);
+    } else {
+        alert('Please select a file to import.');
+    }
 });
 
 // Dropdown logic
@@ -624,4 +649,54 @@ function exportDataToExcel(category) {
         XLSX.utils.book_append_sheet(workbook, worksheet, category);
         XLSX.writeFile(workbook, `${category}.xlsx`);
     });
+}
+
+// Import data from Excel
+function importDataFromExcel(file, category) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const records = XLSX.utils.sheet_to_json(worksheet);
+
+            if (records.length === 0) {
+                importResults.innerHTML = '<p class="error"> הקובץ ריק או שאינו בפורמט הנכון.</p>';
+                return;
+            }
+
+            const itemsRef = database.ref(category);
+            itemsRef.once('value', (snapshot) => {
+                const existingData = snapshot.val() || {};
+                const existingDescriptions = new Set(Object.values(existingData).map(item => (item.description || '').toLowerCase()));
+
+                let importedCount = 0;
+                const skippedItems = [];
+
+                records.forEach(record => {
+                    if (record.description && !existingDescriptions.has(record.description.toLowerCase())) {
+                        itemsRef.push(record);
+                        importedCount++;
+                    } else {
+                        skippedItems.push(record.description || 'פריט ללא שם');
+                    }
+                });
+
+                // Display results
+                let resultsHtml = `<p><strong>תהליך הייבוא הסתיים.</strong></p>`;
+                resultsHtml += `<p>${importedCount} פריטים חדשים נוספו בהצלחה.</p>`;
+                if (skippedItems.length > 0) {
+                    resultsHtml += `<p><strong>${skippedItems.length} פריטים לא נוספו כי הם כבר קיימים:</strong></p>`;
+                    resultsHtml += `<ul>${skippedItems.map(name => `<li>${name}</li>`).join('')}</ul>`;
+                }
+                importResults.innerHTML = resultsHtml;
+            });
+        } catch (error) {
+            console.error("Error processing Excel file:", error);
+            importResults.innerHTML = `<p class="error">שגיאה בעיבוד הקובץ. אנא ודא שהוא בפורמט الصحيح.</p>`;
+        }
+    };
+    reader.readAsArrayBuffer(file);
 }
