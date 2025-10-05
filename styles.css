@@ -671,3 +671,21 @@ h2 {
         transform: scale(1);
     }
 }
+
+/* Export Button Style */
+#export-btn {
+    color: var(--light-blue);
+    font-weight: 600;
+    position: relative;
+    padding-right: 35px; /* Space for the icon */
+}
+
+#export-btn::after {
+    content: '↓'; /* Down arrow icon */
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    line-height: 1;
+}
