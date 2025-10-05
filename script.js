@@ -60,6 +60,10 @@ const importModal = document.getElementById('import-modal');
 const closeImportModalBtn = document.querySelector('.close-import-modal-btn');
 const importForm = document.getElementById('import-form');
 const importResults = document.getElementById('import-results');
+const importReviewModal = document.getElementById('import-review-modal');
+const closeReviewModalBtn = document.querySelector('.close-review-modal-btn');
+const reviewItemsContainer = document.getElementById('review-items-container');
+const finishReviewBtn = document.getElementById('finish-review-btn');
 
 // Authentication State Observer
 auth.onAuthStateChanged(user => {
@@ -155,11 +159,49 @@ importForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const fileInput = document.getElementById('import-file');
     const category = document.getElementById('import-category').value;
+    const importOption = document.querySelector('input[name="import-option"]:checked').value;
+
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
-        importDataFromExcel(file, category);
+        importDataFromExcel(file, category, importOption);
     } else {
         alert('Please select a file to import.');
+    }
+});
+closeReviewModalBtn.addEventListener('click', () => {
+    importReviewModal.classList.add('hidden');
+    importReviewModal.style.display = 'none';
+});
+finishReviewBtn.addEventListener('click', () => {
+    importReviewModal.classList.add('hidden');
+    importReviewModal.style.display = 'none';
+});
+reviewItemsContainer.addEventListener('click', (e) => {
+    const target = e.target;
+    const reviewItem = target.closest('.review-item');
+
+    if (target.classList.contains('update-review-btn')) {
+        const newData = JSON.parse(target.dataset.new);
+        const oldData = JSON.parse(target.dataset.old);
+
+        // Open the standard edit modal, pre-filled with the new data
+        editingItemId = oldData.id; // The ID of the item to update
+        document.getElementById('modal-title').textContent = 'ערוך ועדכן פריט';
+        document.getElementById('item-description').value = newData.description || '';
+        document.getElementById('item-location').value = newData.location || '';
+        document.getElementById('item-notes').value = newData.notes || '';
+        document.getElementById('item-barcode').value = newData.barcode || '';
+        document.getElementById('item-author').value = newData.author || '';
+        document.getElementById('item-category').value = oldData.category;
+
+        itemModal.classList.remove('hidden');
+        itemModal.style.display = 'block';
+
+        // Remove the item from the review list
+        reviewItem.remove();
+    } else if (target.classList.contains('skip-review-btn')) {
+        // Just remove the item from the review list
+        reviewItem.remove();
     }
 });
 
@@ -652,7 +694,7 @@ function exportDataToExcel(category) {
 }
 
 // Import data from Excel
-function importDataFromExcel(file, category) {
+function importDataFromExcel(file, category, importOption) {
     const reader = new FileReader();
     const importResults = document.getElementById('import-results');
     importResults.innerHTML = '<p>מעבד קובץ...</p>'; // "Processing file..."
@@ -666,47 +708,102 @@ function importDataFromExcel(file, category) {
             const records = XLSX.utils.sheet_to_json(worksheet);
 
             if (records.length === 0) {
-                importResults.innerHTML = '<p class="error"> הקובץ ריק או שאינו בפורמט הנכון.</p>';
+                importResults.innerHTML = '<p class="error">הקובץ ריק או שאינו בפורמט הנכון.</p>';
                 return;
             }
 
             const itemsRef = database.ref(category);
             itemsRef.once('value', (snapshot) => {
                 const existingData = snapshot.val() || {};
-                const existingDescriptions = new Set(Object.values(existingData).map(item => (item.description || '').toLowerCase()));
+                const existingItemsMap = new Map(
+                    Object.entries(existingData).map(([id, item]) => [(item.description || '').toLowerCase(), { id, ...item, category }])
+                );
 
                 let importedCount = 0;
-                const skippedItems = [];
+                let skippedCount = 0;
+                const itemsToReview = [];
 
                 records.forEach(record => {
-                    if (record.description && !existingDescriptions.has(record.description.toLowerCase())) {
-                        // Create a new reference with a unique key from Firebase
+                    const description = (record.description || '').toLowerCase();
+                    if (description && existingItemsMap.has(description)) {
+                        // Item exists
+                        if (importOption === 'review') {
+                            itemsToReview.push({ old: existingItemsMap.get(description), new: record });
+                        } else {
+                            skippedCount++;
+                        }
+                    } else if (record.description) {
+                        // New item
                         const newItemRef = itemsRef.push();
-                        // Get the unique key
                         const itemId = newItemRef.key;
-                        // Assign the Firebase-generated key to the record as its itemId
                         record.itemId = itemId;
-                        // Save the complete record with the correct itemId
                         newItemRef.set(record);
                         importedCount++;
-                    } else {
-                        skippedItems.push(record.description || 'פריט ללא שם');
                     }
                 });
 
-                // Display results
+                // Display initial results and handle review modal
                 let resultsHtml = `<p><strong>תהליך הייבוא הסתיים.</strong></p>`;
                 resultsHtml += `<p>${importedCount} פריטים חדשים נוספו בהצלחה.</p>`;
-                if (skippedItems.length > 0) {
-                    resultsHtml += `<p><strong>${skippedItems.length} פריטים לא נוספו כי הם כבר קיימים:</strong></p>`;
-                    resultsHtml += `<ul>${skippedItems.map(name => `<li>${name}</li>`).join('')}</ul>`;
+                if (importOption === 'skip') {
+                    resultsHtml += `<p>${skippedCount} פריטים דולגו כי הם כבר קיימים.</p>`;
                 }
                 importResults.innerHTML = resultsHtml;
+
+                if (itemsToReview.length > 0) {
+                    populateReviewModal(itemsToReview);
+                    importReviewModal.classList.remove('hidden');
+                    importReviewModal.style.display = 'block';
+                    importModal.classList.add('hidden'); // Hide the main import modal
+                } else {
+                     setTimeout(() => {
+                        importModal.classList.add('hidden');
+                        importModal.style.display = 'none';
+                    }, 5000); // Close modal after 5 seconds if no review is needed
+                }
             });
         } catch (error) {
             console.error("Error processing Excel file:", error);
-            importResults.innerHTML = `<p class="error">שגיאה בעיבוד הקובץ. אנא ודא שהוא בפורמט الصحيح.</p>`;
+            importResults.innerHTML = `<p class="error">שגיאה בעיבוד הקובץ. אנא ודא שהוא בפורמט הנכון.</p>`;
         }
     };
     reader.readAsArrayBuffer(file);
+}
+
+function populateReviewModal(items) {
+    reviewItemsContainer.innerHTML = '';
+    items.forEach(item => {
+        const oldData = item.old;
+        const newData = item.new;
+        const reviewCard = document.createElement('div');
+        reviewCard.className = 'review-item';
+
+        // Helper to display a field
+        const field = (label, value) => `<p><strong>${label}:</strong> ${value || ''}</p>`;
+
+        reviewCard.innerHTML = `
+            <h3>${newData.description}</h3>
+            <div class="review-item-details">
+                <div class="review-item-new">
+                    <h4>נתונים חדשים (מהקובץ)</h4>
+                    ${field('מיקום', newData.location)}
+                    ${field('הערות', newData.notes)}
+                    ${field('ברקוד', newData.barcode)}
+                    ${newData.author ? field('סופר', newData.author) : ''}
+                </div>
+                <div class="review-item-old">
+                    <h4>נתונים קיימים</h4>
+                    ${field('מיקום', oldData.location)}
+                    ${field('הערות', oldData.notes)}
+                    ${field('ברקוד', oldData.barcode)}
+                    ${oldData.author ? field('סופר', oldData.author) : ''}
+                </div>
+            </div>
+            <div class="review-item-actions">
+                <button class="btn skip-review-btn">דלג</button>
+                <button class="btn update-review-btn" data-old='${JSON.stringify(oldData)}' data-new='${JSON.stringify(newData)}'>ערוך ועדכן</button>
+            </div>
+        `;
+        reviewItemsContainer.appendChild(reviewCard);
+    });
 }

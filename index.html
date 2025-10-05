@@ -184,14 +184,51 @@
                             <option value="items">פריטים</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>אפשרויות ייבוא:</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="import-option" value="skip" checked>
+                                הוסף פריטים חדשים בלבד (דלג על כפילויות)
+                            </label>
+                            <label>
+                                <input type="radio" name="import-option" value="review">
+                                הוסף חדשים ובדוק עדכונים לפריטים קיימים
+                            </label>
+                        </div>
+                    </div>
                     <button type="submit" class="btn">התחל ייבוא</button>
                 </form>
                 <div id="import-results" class="import-results"></div>
+            </div>
+        </div>
+
+        <!-- Import Review Modal -->
+        <div id="import-review-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-review-modal-btn">&times;</span>
+                <h2>בדיקת עדכונים</h2>
+                <p>נמצאו פריטים קיימים עם נתונים חדשים מהקובץ. אנא בדוק וטפל בכל פריט:</p>
+                <div id="review-items-container">
+                    <!-- Items for review will be populated here by script.js -->
+                </div>
+                <div class="form-group">
+                    <button id="finish-review-btn" class="btn">סיים בדיקה</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="firebase-config.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Move the review modal out of the main container and into the body
+        document.addEventListener('DOMContentLoaded', () => {
+            const reviewModal = document.getElementById('import-review-modal');
+            if (reviewModal) {
+                document.body.appendChild(reviewModal);
+            }
+        });
+    </script>
 </body>
 </html>
