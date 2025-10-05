@@ -11,6 +11,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <!-- QuaggaJS for barcode scanning -->
     <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <!-- Splash Screen -->
@@ -51,6 +53,7 @@
                 </button>
                 <div id="dropdown-content" class="dropdown-content">
                     <button id="items-btn" class="dropdown-item category-btn">פריטים</button>
+                    <button id="export-btn" class="dropdown-item">ייצוא</button>
                 </div>
             </div>
         </header>
@@ -128,6 +131,25 @@
                     </div>
 
                     <button type="submit" id="save-item-btn" class="btn">שמור</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Export Modal -->
+        <div id="export-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-export-modal-btn">&times;</span>
+                <h2>ייצוא נתונים</h2>
+                <form id="export-form">
+                    <div class="form-group">
+                        <label for="export-category">בחר קטגוריה לייצוא:</label>
+                        <select id="export-category" required>
+                            <option value="books">ספרים</option>
+                            <option value="food">מזון</option>
+                            <option value="items">פריטים</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">ייצא ל-Excel</button>
                 </form>
             </div>
         </div>

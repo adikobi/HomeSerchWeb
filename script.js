@@ -51,6 +51,10 @@ const itemForm = document.getElementById('item-form');
 const scannerContainer = document.getElementById('scanner-container');
 const stopScanBtn = document.getElementById('stop-scan-btn');
 const authorGroup = document.getElementById('author-group');
+const exportBtn = document.getElementById('export-btn');
+const exportModal = document.getElementById('export-modal');
+const closeExportModalBtn = document.querySelector('.close-export-modal-btn');
+const exportForm = document.getElementById('export-form');
 
 // Authentication State Observer
 auth.onAuthStateChanged(user => {
@@ -117,6 +121,21 @@ foodBtn.addEventListener('click', () => selectCategory('food'));
 itemsBtn.addEventListener('click', () => selectCategory('items'));
 recipesBtn.addEventListener('click', () => {
     window.location.href = 'recipe-book/recipe-book.html';
+});
+exportBtn.addEventListener('click', () => {
+    exportModal.classList.remove('hidden');
+    exportModal.style.display = 'block';
+});
+closeExportModalBtn.addEventListener('click', () => {
+    exportModal.classList.add('hidden');
+    exportModal.style.display = 'none';
+});
+exportForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const category = document.getElementById('export-category').value;
+    exportDataToExcel(category);
+    exportModal.classList.add('hidden');
+    exportModal.style.display = 'none';
 });
 
 // Dropdown logic
@@ -588,3 +607,21 @@ document.getElementById('item-category').addEventListener('change', function() {
     const authorGroup = document.getElementById('author-group');
     authorGroup.style.display = selectedCategory === 'books' ? 'block' : 'none';
 });
+
+// Export data to Excel
+function exportDataToExcel(category) {
+    const itemsRef = database.ref(category);
+    itemsRef.once('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+            alert('No data to export for this category.');
+            return;
+        }
+
+        const itemsArray = Object.values(data);
+        const worksheet = XLSX.utils.json_to_sheet(itemsArray);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, category);
+        XLSX.writeFile(workbook, `${category}.xlsx`);
+    });
+}
