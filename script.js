@@ -654,6 +654,9 @@ function exportDataToExcel(category) {
 // Import data from Excel
 function importDataFromExcel(file, category) {
     const reader = new FileReader();
+    const importResults = document.getElementById('import-results');
+    importResults.innerHTML = '<p>מעבד קובץ...</p>'; // "Processing file..."
+
     reader.onload = function(e) {
         try {
             const data = new Uint8Array(e.target.result);
@@ -677,7 +680,14 @@ function importDataFromExcel(file, category) {
 
                 records.forEach(record => {
                     if (record.description && !existingDescriptions.has(record.description.toLowerCase())) {
-                        itemsRef.push(record);
+                        // Create a new reference with a unique key from Firebase
+                        const newItemRef = itemsRef.push();
+                        // Get the unique key
+                        const itemId = newItemRef.key;
+                        // Assign the Firebase-generated key to the record as its itemId
+                        record.itemId = itemId;
+                        // Save the complete record with the correct itemId
+                        newItemRef.set(record);
                         importedCount++;
                     } else {
                         skippedItems.push(record.description || 'פריט ללא שם');
