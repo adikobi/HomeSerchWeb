@@ -689,3 +689,34 @@ h2 {
     font-size: 1.2em;
     line-height: 1;
 }
+
+/* Export Modal Specific Styles */
+.close-export-modal-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--white); /* Make it white */
+    transition: color 0.3s ease;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.close-export-modal-btn:hover {
+    color: var(--yellow); /* Add hover effect */
+}
+
+#export-form .btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    border-color: var(--light-blue); /* Use a light color for the border */
+    color: var(--light-blue); /* Use a light color for the text */
+}
+
+#export-form .btn:hover {
+    background-color: var(--light-blue); /* Add hover effect */
+    color: var(--dark-bg);
+}
