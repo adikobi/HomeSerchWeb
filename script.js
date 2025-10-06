@@ -478,10 +478,11 @@ function deleteItem(itemId) {
 }
 
 // Barcode Scanner
-function startBarcodeScanner(search=true) {
-    scannerContainer.classList.remove('hidden');
-    
-    const constraints = {
+function startBarcodeScanner(search = true) {
+    return new Promise((resolve, reject) => {
+        scannerContainer.classList.remove('hidden');
+
+        const constraints = {
         facingMode: "environment",
         width: { ideal: 1280 },
         height: { ideal: 720 },
@@ -587,6 +588,7 @@ function startBarcodeScanner(search=true) {
             if (search) {
                 console.log("🔍 Performing search for barcode...");
                 searchByBarcode(code);
+                resolve(code); // Resolve even in search mode
             } else {
                 console.log("📝 Setting barcode in input field.");
                 document.getElementById('item-barcode').value = code;
@@ -597,6 +599,12 @@ function startBarcodeScanner(search=true) {
                 resolve(code);
             }
         }
+    });
+
+        // Handle potential rejection
+        Quagga.on('error', (err) => {
+            reject(err);
+        });
     });
 }
 

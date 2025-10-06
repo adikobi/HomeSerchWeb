@@ -457,6 +457,10 @@ h2 {
 }
 
 /* Barcode Scanner */
+#scanner-container.hidden {
+    display: none;
+}
+
 #scanner-container {
     position: fixed;
     top: 0;
