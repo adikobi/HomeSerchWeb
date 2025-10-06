@@ -97,6 +97,29 @@
     text-decoration: none;
 }
 
+/* Style for the recipe export button */
+#export-recipes-btn {
+    background-color: var(--green);
+    color: var(--dark-bg);
+    border: none;
+    position: relative;
+    padding-left: 40px; /* Space for the icon */
+}
+
+#export-recipes-btn::before {
+    content: '↓'; /* Down arrow icon */
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+#export-recipes-btn:hover {
+    filter: brightness(1.1);
+}
+
 /* Styling for auto-generated links in recipe content */
 #view-recipe-content a {
     color: var(--light-blue);

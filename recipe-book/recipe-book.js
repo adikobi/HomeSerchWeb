@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeViewModalBtn = document.querySelector('.close-view-modal-btn');
     const viewRecipeTitle = document.getElementById('view-recipe-title');
     const viewRecipeContent = document.getElementById('view-recipe-content');
+    const exportRecipesBtn = document.getElementById('export-recipes-btn');
 
 
     let currentRecipes = [];
@@ -115,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addRecipeBtn.addEventListener('click', () => showModal(false));
     closeRecipeModalBtn.addEventListener('click', hideModal);
     closeViewModalBtn.addEventListener('click', hideViewModal);
+    exportRecipesBtn.addEventListener('click', exportRecipesToWord);
 
 
     // Save or Update Recipe
@@ -197,4 +199,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial load of recipes
     loadRecipes();
+
+    // --- Export Functionality ---
+    function exportRecipesToWord() {
+        if (currentRecipes.length === 0) {
+            alert('אין מתכונים לייצא.');
+            return;
+        }
+
+        // Combine all recipes into a single string with formatting
+        const content = currentRecipes.map(recipe => {
+            return `כותרת: ${recipe.title}\n\nתוכן:\n${recipe.content}\n\n----------------------------------------\n\n`;
+        }).join('');
+
+        // Create a Blob with the content
+        const blob = new Blob([content], { type: 'application/msword;charset=utf-8' });
+
+        // Create a link to trigger the download
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'recipes.doc';
+
+        // Append to body, click, and then remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 });

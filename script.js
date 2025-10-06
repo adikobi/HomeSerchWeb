@@ -51,6 +51,15 @@ const itemForm = document.getElementById('item-form');
 const scannerContainer = document.getElementById('scanner-container');
 const stopScanBtn = document.getElementById('stop-scan-btn');
 const authorGroup = document.getElementById('author-group');
+const exportBtn = document.getElementById('export-btn');
+const exportModal = document.getElementById('export-modal');
+const closeExportModalBtn = document.querySelector('.close-export-modal-btn');
+const exportForm = document.getElementById('export-form');
+const importBtn = document.getElementById('import-btn');
+const importModal = document.getElementById('import-modal');
+const closeImportModalBtn = document.querySelector('.close-import-modal-btn');
+const importForm = document.getElementById('import-form');
+const importResults = document.getElementById('import-results');
 
 // Authentication State Observer
 auth.onAuthStateChanged(user => {
@@ -117,6 +126,41 @@ foodBtn.addEventListener('click', () => selectCategory('food'));
 itemsBtn.addEventListener('click', () => selectCategory('items'));
 recipesBtn.addEventListener('click', () => {
     window.location.href = 'recipe-book/recipe-book.html';
+});
+exportBtn.addEventListener('click', () => {
+    exportModal.classList.remove('hidden');
+    exportModal.style.display = 'block';
+});
+closeExportModalBtn.addEventListener('click', () => {
+    exportModal.classList.add('hidden');
+    exportModal.style.display = 'none';
+});
+exportForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const category = document.getElementById('export-category').value;
+    exportDataToExcel(category);
+    exportModal.classList.add('hidden');
+    exportModal.style.display = 'none';
+});
+importBtn.addEventListener('click', () => {
+    importModal.classList.remove('hidden');
+    importModal.style.display = 'block';
+    importResults.innerHTML = ''; // Clear previous results
+});
+closeImportModalBtn.addEventListener('click', () => {
+    importModal.classList.add('hidden');
+    importModal.style.display = 'none';
+});
+importForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('import-file');
+    const category = document.getElementById('import-category').value;
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        importDataFromExcel(file, category);
+    } else {
+        alert('Please select a file to import.');
+    }
 });
 
 // Dropdown logic
@@ -588,3 +632,81 @@ document.getElementById('item-category').addEventListener('change', function() {
     const authorGroup = document.getElementById('author-group');
     authorGroup.style.display = selectedCategory === 'books' ? 'block' : 'none';
 });
+
+// Export data to Excel
+function exportDataToExcel(category) {
+    const itemsRef = database.ref(category);
+    itemsRef.once('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+            alert('No data to export for this category.');
+            return;
+        }
+
+        const itemsArray = Object.values(data);
+        const worksheet = XLSX.utils.json_to_sheet(itemsArray);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, category);
+        XLSX.writeFile(workbook, `${category}.xlsx`);
+    });
+}
+
+// Import data from Excel
+function importDataFromExcel(file, category) {
+    const reader = new FileReader();
+    const importResults = document.getElementById('import-results');
+    importResults.innerHTML = '<p>מעבד קובץ...</p>'; // "Processing file..."
+
+    reader.onload = function(e) {
+        try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const records = XLSX.utils.sheet_to_json(worksheet);
+
+            if (records.length === 0) {
+                importResults.innerHTML = '<p class="error"> הקובץ ריק או שאינו בפורמט הנכון.</p>';
+                return;
+            }
+
+            const itemsRef = database.ref(category);
+            itemsRef.once('value', (snapshot) => {
+                const existingData = snapshot.val() || {};
+                const existingDescriptions = new Set(Object.values(existingData).map(item => (item.description || '').toLowerCase()));
+
+                let importedCount = 0;
+                const skippedItems = [];
+
+                records.forEach(record => {
+                    if (record.description && !existingDescriptions.has(record.description.toLowerCase())) {
+                        // Create a new reference with a unique key from Firebase
+                        const newItemRef = itemsRef.push();
+                        // Get the unique key
+                        const itemId = newItemRef.key;
+                        // Assign the Firebase-generated key to the record as its itemId
+                        record.itemId = itemId;
+                        // Save the complete record with the correct itemId
+                        newItemRef.set(record);
+                        importedCount++;
+                    } else {
+                        skippedItems.push(record.description || 'פריט ללא שם');
+                    }
+                });
+
+                // Display results
+                let resultsHtml = `<p><strong>תהליך הייבוא הסתיים.</strong></p>`;
+                resultsHtml += `<p>${importedCount} פריטים חדשים נוספו בהצלחה.</p>`;
+                if (skippedItems.length > 0) {
+                    resultsHtml += `<p><strong>${skippedItems.length} פריטים לא נוספו כי הם כבר קיימים:</strong></p>`;
+                    resultsHtml += `<ul>${skippedItems.map(name => `<li>${name}</li>`).join('')}</ul>`;
+                }
+                importResults.innerHTML = resultsHtml;
+            });
+        } catch (error) {
+            console.error("Error processing Excel file:", error);
+            importResults.innerHTML = `<p class="error">שגיאה בעיבוד הקובץ. אנא ודא שהוא בפורמט الصحيح.</p>`;
+        }
+    };
+    reader.readAsArrayBuffer(file);
+}
