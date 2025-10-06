@@ -554,6 +554,10 @@ h2 {
     backdrop-filter: blur(5px);
 }
 
+#auth-modal.hidden {
+    display: none;
+}
+
 #auth-modal .modal-content {
     background-color: var(--light-bg);
     padding: 2rem;
