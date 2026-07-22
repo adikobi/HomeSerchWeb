@@ -1,55 +1,55 @@
 :root[data-theme="dark"] {
-    --bg-primary: #0b0f19;
-    --bg-secondary: #111827;
-    --bg-tertiary: #1f2937;
-    --bg-card: #1f2937;
-    --text-primary: #f9fafb;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
-    --accent-primary: #6366f1; /* Deep Indigo */
-    --accent-primary-hover: #4f46e5;
-    --accent-secondary: #ec4899; /* Vibrant Pink */
-    --accent-secondary-hover: #db2777;
-    --accent-success: #10b981; /* Emerald */
-    --accent-success-hover: #059669;
-    --accent-warning: #f59e0b; /* Amber */
-    --accent-warning-hover: #d97706;
-    --border-color: rgba(243, 244, 246, 0.08);
-    --border-focus: rgba(99, 102, 241, 0.4);
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
-    --glass-bg: rgba(31, 41, 55, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --card-hover-border: rgba(99, 102, 241, 0.3);
+    --bg-primary: #0a0b10;          /* Deep Velvet Obsidian */
+    --bg-secondary: #12131a;        /* Elegant Dark Slate */
+    --bg-tertiary: #191b26;         /* Sophisticated Grey-Blue */
+    --bg-card: #14161f;             /* Clean Matte Card BG */
+    --text-primary: #f5f6fa;        /* Crisp Silk White */
+    --text-secondary: #a0a5b5;      /* Classy Muted Grey */
+    --text-muted: #5e6475;          /* Sophisticated Charcoal */
+    --accent-primary: #e6c15c;      /* Logo Harmonized Gold (#F6E05E style) */
+    --accent-primary-hover: #cfab44;/* Premium Burnished Gold */
+    --accent-secondary: #f07b97;    /* Elegant Dusty Rose Pink */
+    --accent-secondary-hover: #d65c78;
+    --accent-success: #68cfa3;      /* Sage Green */
+    --accent-success-hover: #4fb88b;
+    --accent-warning: #e8a251;      /* Premium Amber */
+    --accent-warning-hover: #cc893b;
+    --border-color: rgba(230, 193, 92, 0.09); /* Subtle Gold border glow */
+    --border-focus: rgba(230, 193, 92, 0.4);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 10px -1px rgba(0, 0, 0, 0.2), 0 2px 6px -1px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 15px 25px -3px rgba(0, 0, 0, 0.35), 0 6px 10px -2px rgba(0, 0, 0, 0.15);
+    --shadow-glow: 0 0 25px rgba(230, 193, 92, 0.08); /* Sophisticated Gold Halo */
+    --glass-bg: rgba(18, 19, 26, 0.75);
+    --glass-border: rgba(230, 193, 92, 0.15);
+    --card-hover-border: rgba(230, 193, 92, 0.35);
 }
 
 :root, :root[data-theme="light"] {
-    --bg-primary: #f3f4f6;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f9fafb;
-    --bg-card: #ffffff;
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
-    --text-muted: #9ca3af;
-    --accent-primary: #4f46e5; /* Deep Indigo */
-    --accent-primary-hover: #4338ca;
-    --accent-secondary: #db2777; /* Vibrant Pink */
-    --accent-secondary-hover: #be185d;
-    --accent-success: #059669; /* Emerald */
-    --accent-success-hover: #047857;
-    --accent-warning: #d97706; /* Amber */
-    --accent-warning-hover: #b45309;
-    --border-color: rgba(17, 24, 39, 0.08);
-    --border-focus: rgba(79, 70, 229, 0.4);
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-    --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.1);
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(0, 0, 0, 0.06);
-    --card-hover-border: rgba(79, 70, 229, 0.25);
+    --bg-primary: #f6f5f0;          /* Warm Alabaster Cream */
+    --bg-secondary: #ffffff;        /* Pure Soft White */
+    --bg-tertiary: #ebeae1;         /* Warm Sand Gray */
+    --bg-card: #ffffff;             /* Pure Card BG */
+    --text-primary: #1c1d24;        /* Deep Obsidian Text */
+    --text-secondary: #585b6b;      /* Sophisticated Slate */
+    --text-muted: #8d91a1;          /* Elegant Muted Gray */
+    --accent-primary: #b89835;      /* Classical Gold Accent */
+    --accent-primary-hover: #9c7f28;/* Rich Antique Gold */
+    --accent-secondary: #c94c6b;    /* Warm Burgundy Rose */
+    --accent-secondary-hover: #a83651;
+    --accent-success: #2d825c;      /* Forest Herb Green */
+    --accent-success-hover: #1e6141;
+    --accent-warning: #c2762d;      /* Warm Terracotta */
+    --accent-warning-hover: #a15e21;
+    --border-color: rgba(184, 152, 53, 0.12); /* Delicate Gold lining */
+    --border-focus: rgba(184, 152, 53, 0.45);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 6px 15px -1px rgba(184, 152, 53, 0.04), 0 2px 8px -1px rgba(0, 0, 0, 0.02);
+    --shadow-lg: 0 15px 30px -3px rgba(184, 152, 53, 0.08), 0 5px 12px -2px rgba(0, 0, 0, 0.02);
+    --shadow-glow: 0 0 25px rgba(184, 152, 53, 0.05);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(184, 152, 53, 0.15);
+    --card-hover-border: rgba(184, 152, 53, 0.35);
 }
 
 * {
