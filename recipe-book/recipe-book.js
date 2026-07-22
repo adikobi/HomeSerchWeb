@@ -54,6 +54,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to load recipes and listen for real-time updates
     const loadRecipes = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('mock-firebase') === 'true') {
+            console.log("Mocking recipes for testing environment.");
+            currentRecipes = [
+                {
+                    id: "recipe1",
+                    title: "עוגת שוקולד חמה חגיגית",
+                    content: "חומרים:\n- 200 גרם שוקולד מריר\n- 100 גרם חמאה\n- 3 ביצים\n- חצי כוס סוכר\n- רבע כוס קמח\n\nאופן ההכנה:\nממיסים שוקולד וחמאה, טורפים ביצים וסוכר, מקפלים קמח ואופים ב-180 מעלות כ-15 דקות."
+                },
+                {
+                    id: "recipe2",
+                    title: "סלט יווני אסלי עם פטה",
+                    content: "רכיבים:\n- עגבניות, מלפפונים, בצל סגול\n- גבינת פטה פרימיום\n- שמן זית מאיכות מעולה\n- זעתר, מלח פלפל"
+                }
+            ];
+            displayRecipes(currentRecipes);
+            return;
+        }
         // Use the sorted query instead of the direct collection reference
         onSnapshot(recipesQuery, (snapshot) => {
             currentRecipes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
