@@ -20,6 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('books-btn').classList.add('active');
         currentCategory = 'books'; // Explicitly set default
     }
+
+    // Theme Toggle Handler
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    }
 });
 
 // Global variables
@@ -260,13 +271,35 @@ function createItemCard(item) {
     card.className = 'item-card';
     card.innerHTML = `
         <h3>${item.description || 'ללא שם'}</h3>
-        <p><strong>מיקום:</strong> ${item.location || 'ללא מיקום'}</p>
-        <p><strong>הערות:</strong> ${item.notes || 'ללא הערות'}</p>
-        ${item.barcode ? `<p><strong>ברקוד:</strong> ${item.barcode}</p>` : ''}
-        ${item.author ? `<p><strong>מחבר:</strong> ${item.author}</p>` : ''}
+        <div class="item-details-list">
+            <div class="item-detail-row">
+                <span class="item-detail-label">מיקום:</span>
+                <span class="item-detail-value">${item.location || 'ללא מיקום'}</span>
+            </div>
+            <div class="item-detail-row">
+                <span class="item-detail-label">הערות:</span>
+                <span class="item-detail-value">${item.notes || 'ללא הערות'}</span>
+            </div>
+            ${item.barcode ? `
+            <div class="item-detail-row">
+                <span class="item-detail-label">ברקוד:</span>
+                <span class="item-detail-value badge-tag badge-tag-secondary">${item.barcode}</span>
+            </div>` : ''}
+            ${item.author ? `
+            <div class="item-detail-row">
+                <span class="item-detail-label">מחבר:</span>
+                <span class="item-detail-value badge-tag">${item.author}</span>
+            </div>` : ''}
+        </div>
         <div class="item-actions">
-            <button class="btn edit-btn" onclick="editItem('${item.id}')">ערוך</button>
-            <button class="btn delete-btn" onclick="deleteItem('${item.id}')">מחק</button>
+            <button class="card-action-btn card-edit-btn" onclick="editItem('${item.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>ערוך</span>
+            </button>
+            <button class="card-action-btn card-delete-btn" onclick="deleteItem('${item.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                <span>מחק</span>
+            </button>
         </div>
     `;
     return card;
