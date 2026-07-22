@@ -15,6 +15,17 @@ function linkify(text) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Theme Toggle Handler
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    }
+
     // DOM Elements
     const addRecipeBtn = document.getElementById('add-recipe-btn');
     const recipeModal = document.getElementById('recipe-modal');
@@ -43,6 +54,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to load recipes and listen for real-time updates
     const loadRecipes = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('mock-firebase') === 'true') {
+            console.log("Mocking recipes for testing environment.");
+            currentRecipes = [
+                {
+                    id: "recipe1",
+                    title: "עוגת שוקולד חמה חגיגית",
+                    content: "חומרים:\n- 200 גרם שוקולד מריר\n- 100 גרם חמאה\n- 3 ביצים\n- חצי כוס סוכר\n- רבע כוס קמח\n\nאופן ההכנה:\nממיסים שוקולד וחמאה, טורפים ביצים וסוכר, מקפלים קמח ואופים ב-180 מעלות כ-15 דקות."
+                },
+                {
+                    id: "recipe2",
+                    title: "סלט יווני אסלי עם פטה",
+                    content: "רכיבים:\n- עגבניות, מלפפונים, בצל סגול\n- גבינת פטה פרימיום\n- שמן זית מאיכות מעולה\n- זעתר, מלח פלפל"
+                }
+            ];
+            displayRecipes(currentRecipes);
+            return;
+        }
         // Use the sorted query instead of the direct collection reference
         onSnapshot(recipesQuery, (snapshot) => {
             currentRecipes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -66,9 +94,21 @@ document.addEventListener('DOMContentLoaded', () => {
             recipeCard.dataset.id = recipe.id; // Add data-id to the card itself
             recipeCard.innerHTML = `
                 <h3>${recipe.title}</h3>
+                <div class="item-details-list">
+                    <div class="item-detail-row">
+                        <span class="item-detail-label">סוג פריט:</span>
+                        <span class="item-detail-value badge-tag badge-tag-warning">מתכון</span>
+                    </div>
+                </div>
                 <div class="item-actions">
-                    <button class="btn edit-btn" data-id="${recipe.id}">ערוך</button>
-                    <button class="btn delete-btn" data-id="${recipe.id}">מחק</button>
+                    <button class="card-action-btn card-edit-btn" data-id="${recipe.id}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        <span>ערוך</span>
+                    </button>
+                    <button class="card-action-btn card-delete-btn" data-id="${recipe.id}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        <span>מחק</span>
+                    </button>
                 </div>
             `;
             recipesContainer.appendChild(recipeCard);
@@ -150,8 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
     recipesContainer.addEventListener('click', async (e) => {
         const target = e.target;
 
-        const editButton = target.closest('.edit-btn');
-        const deleteButton = target.closest('.delete-btn');
+        const editButton = target.closest('.card-edit-btn');
+        const deleteButton = target.closest('.card-delete-btn');
         const card = target.closest('.item-card');
 
         if (editButton) {
