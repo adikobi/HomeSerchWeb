@@ -2,18 +2,23 @@
   "id": "./index.html",
   "name": "מלון ממן",
   "short_name": "מלון ממן",
+  "description": "מלאי וספר מתכונים משפחתי",
   "lang": "he",
   "dir": "rtl",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0e1311",
-  "theme_color": "#0e1311",
+  "orientation": "portrait",
+  "background_color": "#0f0e0c",
+  "theme_color": "#0f0e0c",
   "icons": [
-    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "ספר מתכונים", "url": "./index.html?active=recipes" }
+    { "name": "ספר מתכונים", "url": "./index.html#/recipes" },
+    { "name": "ספרים", "url": "./index.html#/books" }
   ]
 }

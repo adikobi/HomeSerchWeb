@@ -1,47 +1,33 @@
-/* Service worker: network-first app shell with offline fallback. */
-const VERSION = 'mm-v3';
-const SHELL = ['./', './index.html', './styles.css', './manifest.json', './logo.svg', './icon-192.png', './icon-512.png',
-  './firebase-config.js', './recipe-book/firebase-recipes.js',
-  './js/main.js', './js/ui.js', './js/data.js', './js/inventory.js', './js/recipes.js', './js/scanner.js', './js/excel.js'];
-const SWR_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'www.gstatic.com', 'cdn.jsdelivr.net'];
+const CACHE = 'maman-v3';
+const SHELL = ['./', './index.html', './styles.css', './manifest.json', './logo.svg',
+  './js/app.js', './js/ui.js', './js/text.js', './js/data.js', './js/scanner.js',
+  './js/excel.js', './js/lazy.js', './js/recipes-data.js'];
+const STATIC_HOSTS = ['www.gstatic.com', 'cdn.jsdelivr.net', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => Promise.all(SHELL.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CACHE).then((c) => Promise.allSettled(SHELL.map((u) => c.add(u)))).then(() => self.skipWaiting()));
 });
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+self.addEventListener('activate', (e) => {
+  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
-const withTimeout = (p, ms) => new Promise((res, rej) => { const t = setTimeout(() => rej(new Error('timeout')), ms); p.then(v => { clearTimeout(t); res(v); }, e => { clearTimeout(t); rej(e); }); });
+const put = (req, res) => { if (res && (res.ok || res.type === 'opaque')) caches.open(CACHE).then((c) => c.put(req, res.clone())); return res; };
 
-self.addEventListener('fetch', e => {
+self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-
   if (url.origin === location.origin) {
-    e.respondWith((async () => {
-      const cache = await caches.open(VERSION);
-      try {
-        const res = await withTimeout(fetch(req), 4000);
-        if (res.ok) cache.put(req, res.clone());
-        return res;
-      } catch {
-        const hit = await cache.match(req, { ignoreSearch: true });
-        if (hit) return hit;
-        if (req.mode === 'navigate') { const idx = await cache.match('./index.html'); if (idx) return idx; }
-        return Response.error();
-      }
-    })());
-    return;
-  }
-
-  if (SWR_HOSTS.includes(url.hostname)) {
-    e.respondWith((async () => {
-      const cache = await caches.open(VERSION);
-      const hit = await cache.match(req);
-      const net = fetch(req).then(res => { if (res.ok || res.type === 'opaque') cache.put(req, res.clone()); return res; }).catch(() => null);
-      return hit || (await net) || Response.error();
-    })());
+    // network-first so deployments show up immediately; cache is the offline fallback
+    e.respondWith(
+      fetch(req).then((r) => put(req, r)).catch(() =>
+        caches.match(req).then((m) => m || (req.mode === 'navigate' ? caches.match('./index.html') : Response.error())))
+    );
+  } else if (STATIC_HOSTS.includes(url.hostname)) {
+    // stale-while-revalidate for libraries and fonts
+    e.respondWith(caches.match(req).then((m) => {
+      const net = fetch(req).then((r) => put(req, r)).catch(() => m);
+      return m || net;
+    }));
   }
 });
