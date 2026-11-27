@@ -1,227 +1,320 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he" dir="rtl" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>מלון ממן — מלאי וספר מתכונים</title>
-    <meta name="description" content="ניהול מלאי של ספרים, מזון ופריטים, וספר מתכונים משפחתי.">
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" id="theme-color-meta" content="#0e0d0b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="מלון ממן">
-    <link rel="apple-touch-icon" href="./icon-192.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        })();
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מלון ממן — מלאי וספר מתכונים</title>
+<meta name="description" content="ניהול מלאי של ספרים, מזון ופריטים, וספר מתכונים משפחתי.">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" id="theme-color-meta" content="#0f0e0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="מלון ממן">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" href="./logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+(function(){var t='dark';try{t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){}
+document.documentElement.setAttribute('data-theme',t);document.getElementById('theme-color-meta').content=t==='light'?'#f6f2ea':'#0f0e0c'})();
+</script>
+<link rel="stylesheet" href="styles.css">
+<script defer src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+<script defer src="firebase-config.js"></script>
+<script type="module" src="js/app.js"></script>
 </head>
 <body>
-    <a class="skip-link" href="#main">דלג לתוכן</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+<symbol id="i-food" viewBox="0 0 24 24"><path d="M4 3v5a3 3 0 0 0 6 0V3"/><path d="M7 11v10"/><path d="M17 21V3c-2.5 1.5-4 4.5-4 8h4"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3.3 7.5L12 12.5l8.7-5"/><path d="M12 22V12.5"/></symbol>
+<symbol id="i-chef" viewBox="0 0 24 24"><path d="M6 13.9A4 4 0 0 1 7 6a5 5 0 0 1 9.6-1A4 4 0 0 1 18 13.9V20H6z"/><path d="M6 17h12"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8M10 8v8M13 8v8M17 8v8"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-note" viewBox="0 0 24 24"><path d="M17 10H3M21 6H3M21 14H3M17 18H3"/></symbol>
+<symbol id="i-barcode" viewBox="0 0 24 24"><path d="M4 5v14M8 5v14M12 5v14M16 5v14M20 5v14"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v14"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+<symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+<symbol id="i-offline" viewBox="0 0 24 24"><path d="M1 1l22 22M16.7 11.1A11 11 0 0 1 22.6 9M5 12.9a11 11 0 0 1 5.2-2.8M8.5 16.4a6 6 0 0 1 7 0M12 20h.01M1.4 9a16 16 0 0 1 4.7-3"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M17.9 17.9A10.9 10.9 0 0 1 12 20C5 20 1 12 1 12a18.5 18.5 0 0 1 5.1-5.9M9.9 4.2A9.1 9.1 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2M1 1l22 22"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></symbol>
+</svg>
 
-    <div id="splash-screen">
-        <img src="logo.svg" alt="מלון ממן" class="splash-logo">
+<div id="splash"><img src="logo.svg" alt="מלון ממן" class="splash-logo"></div>
+
+<!-- AUTH -->
+<section id="auth" class="auth" hidden>
+  <div class="auth-card">
+    <img src="logo.svg" alt="" class="auth-logo">
+    <h1>מלון ממן</h1>
+    <p class="auth-sub">מלאי וספר מתכונים במקום אחד</p>
+    <form id="auth-form" novalidate>
+      <div class="field"><label for="email">אימייל</label>
+        <input class="input" type="email" id="email" dir="ltr" placeholder="name@example.com" autocomplete="email" inputmode="email" autocapitalize="off" required></div>
+      <div class="field"><label for="password">סיסמה</label>
+        <div class="input-row pw">
+          <input class="input" type="password" id="password" dir="ltr" placeholder="••••••••" autocomplete="current-password" required>
+          <button type="button" class="icon-btn pw-toggle" id="pw-toggle" aria-label="הצג סיסמה" aria-pressed="false"><svg class="ic"><use href="#i-eye"/></svg></button>
+        </div></div>
+      <p class="form-error" id="auth-error" role="alert" hidden></p>
+      <div class="auth-actions">
+        <button type="submit" id="login-btn" class="btn primary"><span class="btn-label">התחבר</span></button>
+        <button type="button" id="register-btn" class="btn ghost"><span class="btn-label">צור חשבון חדש</span></button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app" hidden>
+  <header class="header">
+    <div class="wrap header-in">
+      <button class="brand" id="brand" type="button" aria-label="לראש הדף">
+        <img src="logo.svg" alt="" class="logo"><span class="title">מלון ממן</span>
+      </button>
+      <div class="header-actions">
+        <span class="net" id="net" hidden><svg class="ic"><use href="#i-offline"/></svg>לא מחובר</span>
+        <button class="icon-btn" id="theme-btn" type="button" aria-label="החלף ערכת צבעים">
+          <svg class="ic sun"><use href="#i-sun"/></svg><svg class="ic moon"><use href="#i-moon"/></svg>
+        </button>
+        <div class="menu-wrap">
+          <button class="icon-btn" id="menu-btn" type="button" aria-label="עוד אפשרויות" aria-haspopup="menu" aria-expanded="false" aria-controls="menu"><svg class="ic"><use href="#i-dots"/></svg></button>
+          <div class="menu" id="menu" role="menu">
+            <button type="button" role="menuitem" data-menu="export"><svg class="ic"><use href="#i-download"/></svg>ייצוא לאקסל</button>
+            <button type="button" role="menuitem" data-menu="import"><svg class="ic"><use href="#i-upload"/></svg>ייבוא מאקסל</button>
+            <button type="button" role="menuitem" data-menu="recipes-word"><svg class="ic"><use href="#i-doc"/></svg>ייצוא מתכונים ל-Word</button>
+            <hr>
+            <button type="button" role="menuitem" data-menu="logout" class="danger"><svg class="ic"><use href="#i-logout"/></svg>התנתקות</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap main" id="main">
+    <nav class="tabs" id="tabs" role="tablist" aria-label="קטגוריות">
+      <span class="tab-ind" aria-hidden="true"></span>
+      <button class="tab" role="tab" type="button" data-tab="books"><svg class="ic"><use href="#i-book"/></svg><span>ספרים</span></button>
+      <button class="tab" role="tab" type="button" data-tab="food"><svg class="ic"><use href="#i-food"/></svg><span>מזון</span></button>
+      <button class="tab" role="tab" type="button" data-tab="items"><svg class="ic"><use href="#i-box"/></svg><span>פריטים</span></button>
+      <button class="tab" role="tab" type="button" data-tab="recipes"><svg class="ic"><use href="#i-chef"/></svg><span>מתכונים</span></button>
+    </nav>
+
+    <div class="toolbar">
+      <div class="search" id="search-box" data-scan="true">
+        <svg class="ic search-ic"><use href="#i-search"/></svg>
+        <label for="search" class="sr-only">חיפוש</label>
+        <input class="input" id="search" type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="search-actions">
+          <button class="icon-btn sm" id="search-clear" type="button" aria-label="נקה חיפוש" hidden><svg class="ic"><use href="#i-x"/></svg></button>
+          <button class="icon-btn sm" id="scan-btn" type="button" aria-label="סרוק ברקוד"><svg class="ic"><use href="#i-scan"/></svg></button>
+        </div>
+      </div>
+      <button class="btn primary add-btn" id="add-btn" type="button" aria-label="הוסף"><svg class="ic"><use href="#i-plus"/></svg><span>הוסף</span></button>
     </div>
 
-    <div id="auth-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-        <div class="modal-content auth-modal-content">
-            <div class="auth-brand">
-                <img src="logo.svg" alt="" class="auth-logo">
-                <h2 id="auth-title">מלון ממן</h2>
-                <p class="auth-subtitle">מלאי וספר מתכונים במקום אחד</p>
-            </div>
-            <form id="auth-form">
-                <div class="form-group">
-                    <label for="email">אימייל</label>
-                    <input type="email" id="email" placeholder="name@example.com" autocomplete="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">סיסמה</label>
-                    <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
-                </div>
-                <div class="auth-actions">
-                    <button type="submit" id="login-btn" class="btn auth-btn auth-btn-primary">התחבר</button>
-                    <button type="button" id="register-btn" class="btn auth-btn auth-btn-secondary">צור חשבון</button>
-                </div>
-            </form>
-        </div>
+    <div class="meta"><span id="count" aria-live="polite"></span><button class="link-btn" id="sort-btn" type="button"></button></div>
+    <div class="list" id="list" role="tabpanel"></div>
+  </main>
+</div>
+
+<!-- ITEM FORM -->
+<dialog class="sheet" id="item-sheet" aria-labelledby="item-sheet-title">
+  <div class="sheet-panel">
+    <div class="sheet-grab" aria-hidden="true"><span></span></div>
+    <header class="sheet-head"><h2 class="sheet-title" id="item-sheet-title">פריט חדש</h2>
+      <button type="button" class="icon-btn" data-close aria-label="סגור"><svg class="ic"><use href="#i-x"/></svg></button></header>
+    <div class="sheet-body">
+      <form id="item-form" novalidate autocomplete="off">
+        <div class="field"><label for="if-cat">קטגוריה</label>
+          <div class="select"><select class="input" id="if-cat"><option value="books">ספרים</option><option value="food">מזון</option><option value="items">פריטים</option></select></div></div>
+        <div class="field"><label for="if-desc">שם הפריט</label>
+          <input class="input" id="if-desc" type="text" enterkeyhint="next"><p class="field-error" hidden></p></div>
+        <div class="field" id="if-author-field"><label for="if-author">סופר</label>
+          <input class="input" id="if-author" type="text" list="dl-authors" enterkeyhint="next"></div>
+        <div class="field"><label for="if-loc">מיקום</label>
+          <input class="input" id="if-loc" type="text" list="dl-locations" enterkeyhint="next"><p class="field-error" hidden></p></div>
+        <div class="field"><label for="if-notes">הערות</label>
+          <textarea class="input" id="if-notes" rows="2"></textarea></div>
+        <div class="field"><label for="if-barcode">ברקוד</label>
+          <div class="input-row"><input class="input" id="if-barcode" type="text" inputmode="numeric" dir="ltr">
+            <button type="button" class="btn" id="if-scan"><svg class="ic"><use href="#i-scan"/></svg><span>סרוק</span></button></div>
+          <p class="field-hint" id="if-barcode-hint" hidden></p></div>
+        <datalist id="dl-authors"></datalist><datalist id="dl-locations"></datalist>
+      </form>
     </div>
+    <footer class="sheet-foot">
+      <button type="button" class="btn danger" id="if-delete" hidden><svg class="ic"><use href="#i-trash"/></svg><span>מחק</span></button>
+      <button type="submit" form="item-form" class="btn primary grow" id="if-save"><span class="btn-label">שמור</span></button>
+    </footer>
+  </div>
+</dialog>
 
-    <div class="container hidden" id="main-container">
-        <header class="app-header">
-            <div class="header-left">
-                <button id="logout-btn" class="logout-btn" type="button">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    <span>התנתק</span>
-                </button>
-                <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="החלף ערכת צבעים">
-                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                </button>
-            </div>
-            <div class="header-center">
-                <img src="logo.svg" alt="" class="header-logo">
-                <h1 class="app-title">מלון ממן</h1>
-            </div>
-            <div class="header-right">
-                <div class="dropdown header-dropdown">
-                    <button id="more-btn" class="more-btn" type="button" aria-label="עוד אפשרויות" aria-haspopup="true"><span></span><span></span><span></span></button>
-                    <div id="dropdown-content" class="dropdown-content">
-                        <button id="items-btn" class="dropdown-item category-btn" type="button">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
-                            <span>פריטים</span>
-                        </button>
-                        <button id="export-btn" class="dropdown-item" type="button">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                            <span>ייצוא לאקסל</span>
-                        </button>
-                        <button id="import-btn" class="dropdown-item" type="button">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            <span>ייבוא מאקסל</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
+<!-- ITEM DETAIL -->
+<dialog class="sheet" id="detail-sheet" aria-labelledby="detail-title">
+  <div class="sheet-panel">
+    <div class="sheet-grab" aria-hidden="true"><span></span></div>
+    <header class="sheet-head"><h2 class="sheet-title" id="detail-title"></h2>
+      <button type="button" class="icon-btn" data-close aria-label="סגור"><svg class="ic"><use href="#i-x"/></svg></button></header>
+    <div class="sheet-body" id="detail-body"></div>
+    <footer class="sheet-foot">
+      <button type="button" class="btn danger" id="detail-delete"><svg class="ic"><use href="#i-trash"/></svg><span>מחק</span></button>
+      <button type="button" class="btn primary grow" id="detail-edit"><svg class="ic"><use href="#i-edit"/></svg><span>עריכה</span></button>
+    </footer>
+  </div>
+</dialog>
 
-        <main class="main-content" id="main">
-            <nav class="category-selection" aria-label="קטגוריות">
-                <div class="category-buttons">
-                    <button id="books-btn" class="category-btn" type="button">ספרים</button>
-                    <button id="food-btn" class="category-btn" type="button">מזון</button>
-                    <button id="recipes-btn" class="category-btn" type="button">ספר מתכונים</button>
-                </div>
-            </nav>
-
-            <div class="search-add-section">
-                <div class="search-container">
-                    <label for="search-input" class="sr-only">חיפוש פריטים</label>
-                    <input type="text" id="search-input" placeholder="חיפוש לפי שם, מיקום, הערה או סופר">
-                    <button id="search-btn" class="btn search-btn" type="button">חפש</button>
-                </div>
-                <div class="addScan-container">
-                    <button id="add-item-btn" class="btn action-btn" type="button">הוסף פריט</button>
-                    <button id="scan-barcode-btn" class="btn action-btn" type="button">סרוק ברקוד</button>
-                </div>
-            </div>
-
-            <section class="items-list" aria-label="רשימת פריטים">
-                <div id="items-container"></div>
-            </section>
-        </main>
-
-        <div id="scanner-container" class="hidden">
-            <div id="interactive" class="viewport"></div>
-            <button id="stop-scan-btn" class="btn" type="button">הפסק סריקה</button>
-        </div>
-
-        <div id="item-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <div class="modal-content">
-                <button type="button" class="close-btn" aria-label="סגור">&times;</button>
-                <h2 id="modal-title">הוסף פריט חדש</h2>
-                <form id="item-form">
-                    <div class="form-group">
-                        <label for="item-category">קטגוריה</label>
-                        <select id="item-category" required>
-                            <option value="books">ספרים</option>
-                            <option value="food">מזון</option>
-                            <option value="items">פריטים</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="item-description">שם הפריט</label>
-                        <input type="text" id="item-description" required>
-                    </div>
-                    <div class="form-group" id="author-group">
-                        <label for="item-author">סופר</label>
-                        <input type="text" id="item-author">
-                    </div>
-                    <div class="form-group">
-                        <label for="item-location">מיקום</label>
-                        <input type="text" id="item-location" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="item-notes">הערות</label>
-                        <textarea id="item-notes"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="item-barcode">ברקוד</label>
-                        <input type="text" id="item-barcode" inputmode="numeric">
-                    </div>
-                    <button type="submit" id="save-item-btn" class="btn">שמור</button>
-                </form>
-            </div>
-        </div>
-
-        <div id="export-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="export-title">
-            <div class="modal-content">
-                <button type="button" class="close-export-modal-btn" aria-label="סגור">&times;</button>
-                <h2 id="export-title">ייצוא נתונים</h2>
-                <form id="export-form">
-                    <div class="form-group">
-                        <label for="export-category">קטגוריה לייצוא</label>
-                        <select id="export-category" required>
-                            <option value="books">ספרים</option>
-                            <option value="food">מזון</option>
-                            <option value="items">פריטים</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn">ייצא ל-Excel</button>
-                </form>
-            </div>
-        </div>
-
-        <div id="import-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="import-title">
-            <div class="modal-content">
-                <button type="button" class="close-import-modal-btn" aria-label="סגור">&times;</button>
-                <h2 id="import-title">ייבוא נתונים מאקסל</h2>
-                <div class="import-instructions">
-                    <p><strong>הקובץ צריך להיות בפורמט .xlsx או .xls עם העמודות:</strong></p>
-                    <ul>
-                        <li><strong>description</strong> — שם הפריט (חובה)</li>
-                        <li><strong>location</strong> — מיקום</li>
-                        <li><strong>notes</strong> — הערות</li>
-                        <li><strong>barcode</strong> — ברקוד</li>
-                        <li><strong>author</strong> — סופר (לספרים בלבד)</li>
-                    </ul>
-                </div>
-                <form id="import-form">
-                    <div class="form-group">
-                        <label for="import-file">קובץ</label>
-                        <input type="file" id="import-file" accept=".xlsx, .xls" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="import-category">קטגוריה לייבוא</label>
-                        <select id="import-category" required>
-                            <option value="books">ספרים</option>
-                            <option value="food">מזון</option>
-                            <option value="items">פריטים</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn">התחל ייבוא</button>
-                </form>
-                <div id="import-results" class="import-results" aria-live="polite"></div>
-            </div>
-        </div>
+<!-- RECIPE FORM -->
+<dialog class="sheet wide" id="recipe-sheet" aria-labelledby="recipe-sheet-title">
+  <div class="sheet-panel">
+    <div class="sheet-grab" aria-hidden="true"><span></span></div>
+    <header class="sheet-head"><h2 class="sheet-title" id="recipe-sheet-title">מתכון חדש</h2>
+      <button type="button" class="icon-btn" data-close aria-label="סגור"><svg class="ic"><use href="#i-x"/></svg></button></header>
+    <div class="sheet-body">
+      <form id="recipe-form" novalidate autocomplete="off">
+        <div class="field"><label for="rf-title">כותרת</label>
+          <input class="input" id="rf-title" type="text" enterkeyhint="next"><p class="field-error" hidden></p></div>
+        <div class="field"><label for="rf-content">תוכן המתכון</label>
+          <textarea class="input tall" id="rf-content" rows="8" placeholder="חומרים:&#10;- ...&#10;&#10;אופן ההכנה:&#10;1. ..."></textarea>
+          <p class="field-error" hidden></p>
+          <p class="field-hint">שורה שמסתיימת ב־״:״ הופכת לכותרת, שורות שמתחילות ב־״-״ או במספר לרשימה, וקישורים נפתחים בלחיצה.</p></div>
+      </form>
     </div>
+    <footer class="sheet-foot">
+      <button type="button" class="btn danger" id="rf-delete" hidden><svg class="ic"><use href="#i-trash"/></svg><span>מחק</span></button>
+      <button type="submit" form="recipe-form" class="btn primary grow" id="rf-save"><span class="btn-label">שמור</span></button>
+    </footer>
+  </div>
+</dialog>
 
-    <script src="firebase-config.js"></script>
-    <script src="script.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js');
-        }
-    </script>
+<!-- RECIPE VIEW -->
+<dialog class="sheet wide" id="recipe-view" aria-labelledby="rv-title">
+  <div class="sheet-panel tall-panel">
+    <div class="sheet-grab" aria-hidden="true"><span></span></div>
+    <header class="sheet-head"><h2 class="sheet-title" id="rv-title"></h2>
+      <button type="button" class="icon-btn" data-close aria-label="סגור"><svg class="ic"><use href="#i-x"/></svg></button></header>
+    <div class="sheet-body">
+      <div class="chip-actions">
+        <button type="button" class="chip-btn" id="rv-copy"><svg class="ic"><use href="#i-copy"/></svg>העתק</button>
+        <button type="button" class="chip-btn" id="rv-share" hidden><svg class="ic"><use href="#i-share"/></svg>שתף</button>
+        <button type="button" class="chip-btn" id="rv-wake" aria-pressed="false" hidden><svg class="ic"><use href="#i-sun"/></svg>השאר מסך דלוק</button>
+      </div>
+      <div class="rich" id="rv-content"></div>
+    </div>
+    <footer class="sheet-foot">
+      <button type="button" class="btn danger" id="rv-delete"><svg class="ic"><use href="#i-trash"/></svg><span>מחק</span></button>
+      <button type="button" class="btn primary grow" id="rv-edit"><svg class="ic"><use href="#i-edit"/></svg><span>עריכה</span></button>
+    </footer>
+  </div>
+</dialog>
+
+<!-- EXPORT -->
+<dialog class="sheet" id="export-sheet" aria-labelledby="export-title">
+  <div class="sheet-panel">
+    <div class="sheet-grab" aria-hidden="true"><span></span></div>
+    <header class="sheet-head"><h2 class="sheet-title" id="export-title">ייצוא לאקסל</h2>
+      <button type="button" class="icon-btn" data-close aria-label="סגור"><svg class="ic"><use href="#i-x"/></svg></button></header>
+    <div class="sheet-body">
+      <form id="export-form">
+        <p class="field-label" id="exp-l">איזו קטגוריה לייצא?</p>
+        <div class="seg" role="radiogroup" aria-labelledby="exp-l">
+          <label><input type="radio" name="export-cat" value="books" checked><span>ספרים</span></label>
+          <label><input type="radio" name="export-cat" value="food"><span>מזון</span></label>
+          <label><input type="radio" name="export-cat" value="items"><span>פריטים</span></label>
+        </div>
+      </form>
+    </div>
+    <footer class="sheet-foot"><button type="submit" form="export-form" class="btn primary grow" id="export-go"><span class="btn-label">הורד קובץ Excel</span></button></footer>
+  </div>
+</dialog>
+
+<!-- IMPORT -->
+<dialog class="sheet" id="import-sheet" aria-labelledby="import-title">
+  <div class="sheet-panel">
+    <div class="sheet-grab" aria-hidden="true"><span></span></div>
+    <header class="sheet-head"><h2 class="sheet-title" id="import-title">ייבוא מאקסל</h2>
+      <button type="button" class="icon-btn" data-close aria-label="סגור"><svg class="ic"><use href="#i-x"/></svg></button></header>
+    <div class="sheet-body">
+      <form id="import-form">
+        <label class="drop" id="drop" for="import-file">
+          <svg class="ic big"><use href="#i-upload"/></svg>
+          <strong id="drop-name">בחר קובץ או גרור לכאן</strong>
+          <span class="muted" id="drop-sub">.xlsx או .xls</span>
+          <input type="file" id="import-file" class="sr-only" accept=".xlsx,.xls">
+        </label>
+        <div class="hint-box">
+          <p><b>עמודות נתמכות:</b></p>
+          <p><code>description</code> שם (חובה) · <code>location</code> מיקום · <code>notes</code> הערות · <code>barcode</code> ברקוד · <code>author</code> סופר (ספרים)</p>
+        </div>
+        <p class="field-label" id="imp-l">ייבוא אל</p>
+        <div class="seg" role="radiogroup" aria-labelledby="imp-l">
+          <label><input type="radio" name="import-cat" value="books" checked><span>ספרים</span></label>
+          <label><input type="radio" name="import-cat" value="food"><span>מזון</span></label>
+          <label><input type="radio" name="import-cat" value="items"><span>פריטים</span></label>
+        </div>
+        <div class="import-results" id="import-results" aria-live="polite"></div>
+      </form>
+    </div>
+    <footer class="sheet-foot"><button type="submit" form="import-form" class="btn primary grow" id="import-go"><span class="btn-label">התחל ייבוא</span></button></footer>
+  </div>
+</dialog>
+
+<!-- CONFIRM -->
+<dialog class="sheet centered" id="confirm" aria-labelledby="confirm-title" aria-describedby="confirm-msg">
+  <div class="sheet-panel small">
+    <div class="sheet-body confirm-body">
+      <h2 id="confirm-title" class="confirm-title"></h2>
+      <p id="confirm-msg" class="confirm-msg"></p>
+    </div>
+    <footer class="sheet-foot noborder">
+      <button type="button" class="btn grow" id="confirm-cancel">ביטול</button>
+      <button type="button" class="btn grow primary" id="confirm-ok">אישור</button>
+    </footer>
+  </div>
+</dialog>
+
+<!-- SCANNER -->
+<dialog class="sheet full" id="scanner" aria-label="סריקת ברקוד">
+  <div class="sheet-panel">
+    <div class="scan-view" id="scan-view"></div>
+    <div class="scan-ui">
+      <div class="scan-top">
+        <button type="button" class="icon-btn glass" data-close aria-label="סגור"><svg class="ic"><use href="#i-x"/></svg></button>
+        <button type="button" class="icon-btn glass" id="scan-torch" hidden aria-pressed="false" aria-label="פנס"><svg class="ic"><use href="#i-zap"/></svg></button>
+      </div>
+      <div class="reticle" id="reticle"><i></i><i></i><i></i><i></i></div>
+      <p class="scan-status" id="scan-status" aria-live="polite"></p>
+      <form class="scan-manual" id="scan-manual">
+        <input class="input glass" id="scan-manual-input" type="text" inputmode="numeric" dir="ltr" placeholder="או הקלד ברקוד ידנית" autocomplete="off" aria-label="ברקוד ידני">
+        <button type="submit" class="btn primary">אישור</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<div id="toasts" role="status" aria-live="polite"></div>
 </body>
 </html>
