@@ -1,22 +1,19 @@
 {
-  "name": "Maman Hotel",
-  "short_name": "Maman",
+  "id": "./index.html",
+  "name": "מלון ממן",
+  "short_name": "מלון ממן",
+  "lang": "he",
+  "dir": "rtl",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#0e1311",
+  "theme_color": "#0e1311",
   "icons": [
-    {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "ספר מתכונים", "url": "./index.html?active=recipes" }
   ]
 }
